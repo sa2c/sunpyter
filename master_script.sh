@@ -1,5 +1,14 @@
 #!/bin/bash
+
+if [ $# -lt 2 ]
+then
+    echo "Usage: $0 <remote> <run mode>"
+    echo "e.g.,  $0 s.michele.mesiti@sunbird.swansea.ac.uk compute"
+    exit
+fi
+
 REMOTE=$1 # e.g. s.michele.mesiti@vnc.sunbird.swansea.ac.uk
+USE_LOGIN=$2
 
 if [ -z "$REMOTE" ]
 then 
@@ -7,19 +16,33 @@ then
     exit
 fi
 
+if [ "$USE_LOGIN" == "compute" ]
+then 
+    LAUNCH_JUPYTER_COMMAND=launch_jupyter_compute.sh
+elif [ "$USE_LOGIN" == "login" ]
+then
+    LAUNCH_JUPYTER_COMMAND=launch_jupyter_login.sh
+else
+    echo 'Wrong launch specification, use either "login" or "compute".'
+    exit
+fi
 
-ssh $REMOTE 'bash -s' < launch_jupyter.sh &> jupyter_log.txt &
+
+ssh $REMOTE 'bash -s' < <( cat launch_jupyter_preamble.sh "$LAUNCH_JUPYTER_COMMAND") &> jupyter_log.txt &
 
 echo "Waiting for jupyter notebook to start on server..."
 
 
 RUNNINGCONFIRMATIONSTRING="Use Control-C to stop this server and shut down all kernels (twice to skip confirmation)."
 
+
+printf "Waiting..."
 while [ $(grep $RUNNINGCONFIRMATIONSTRING jupyter_log.txt 2>/dev/null | wc -l ) -eq 0 ]
 do
     sleep 1
-    echo "Waiting..."
+    printf .
 done
+echo "Launched."
 
 echo "Output from the server:"
 echo "========================================================================"
@@ -30,8 +53,11 @@ echo "Creating ssh tunnnel:"
 # The command to create the tunnel contains the host and the port, and that 
 # comes from the script running on sunbird.
 
-REMOTE_HOST_AND_PORT=$(grep -A 1 "The Jupyter Notebook is running at:" jupyter_log.txt | tail -n 1 | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\1|')
-AUTH_TOKEN=$(grep -A 1 "The Jupyter Notebook is running at:" jupyter_log.txt | tail -n 1 | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\2|')
+# This 'purification' is needed to prevent grep from misreading the file
+LINE=$(cat jupyter_log.txt | tr -d '\000' | grep -A 1 "The Jupyter Notebook is running at:" | tail -n 1)
+
+REMOTE_HOST_AND_PORT=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\1|')
+AUTH_TOKEN=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\2|')
 
 
 # Finding a free local port
