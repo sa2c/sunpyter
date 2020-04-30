@@ -32,8 +32,8 @@ script).
 With `login`, `sunpyter.sh` starts a jupyter notebook server on the login node
 (using the `launch_jupyter_login.sh` script).
 
-NOTE: The command launched with the `login` argument does not currently work on 
-`sunbird.swansea.ac.uk`, but works on `vnc.sunbird.swansea.ac.uk`.
+NOTE: The `login` option does not currently work with `sunbird.swansea.ac.uk`, 
+but works with `vnc.sunbird.swansea.ac.uk`.
 
 ### `SHELLSETUP`: Conda and remote setup
 
