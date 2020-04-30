@@ -13,8 +13,13 @@ when it is starting).
 
 ## Config file
 A config file must be provided, which defines a number of environment 
-variables. See `config_example.sh` for an inspiration.
-
+variables. See `config_example.sh`, for an inspiration:
+```bash
+REMOTE=s.michele.mesiti@vnc.sunbird.swansea.ac.uk # Username&host, or alias
+SHELLSETUP=shellsetup_example.sh # see example
+RUNWHERE=compute # either 'compute' or 'login'
+ACCOUNT=scw1000 # account to run the job on for the jupyter notebook.
+```
 ### `REMOTE`
 The `REMOTE` variable is used throughout `sunpyter.sh` as the destination of 
 all ssh connections.
