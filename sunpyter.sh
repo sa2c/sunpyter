@@ -1,14 +1,16 @@
 #!/bin/bash
 
-if [ $# -lt 2 ]
+if [ $# -lt 3 ]
 then
-    echo "Usage: $0 <remote> <run mode>"
-    echo "e.g.,  $0 s.michele.mesiti@sunbird.swansea.ac.uk compute"
+    echo "Usage: $0 <remote> <shell setup script> <run mode>"
+    echo "e.g.:"
+    echo "$0 s.michele.mesiti@sunbird.swansea.ac.uk shellsetup_example.sh compute #EXAMPLE"
     exit
 fi
 
 REMOTE=$1 # e.g. s.michele.mesiti@vnc.sunbird.swansea.ac.uk
-USE_LOGIN=$2
+SHELLSETUP=$2
+USE_LOGIN=$3
 
 if [ -z "$REMOTE" ]
 then 
@@ -27,8 +29,7 @@ else
     exit
 fi
 
-
-ssh $REMOTE 'bash -s' < <( cat launch_jupyter_preamble.sh "$LAUNCH_JUPYTER_COMMAND") &> jupyter_log.txt &
+ssh $REMOTE 'bash -s' < <( cat launch_jupyter_preamble.sh "$SHELLSETUP" "$LAUNCH_JUPYTER_COMMAND") &> jupyter_log.txt &
 
 echo "Waiting for jupyter notebook to start on server..."
 

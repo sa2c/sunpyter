@@ -4,7 +4,7 @@ jupyter notebooks on Sunbird without much effort.
 ## Example usage
 From a terminal, use the command:
 ```bash
-./sunpyter.sh s.michele.mesiti@vnc.sunbird.swansea.ac.uk compute
+./sunpyter.sh s.michele.mesiti@vnc.sunbird.swansea.ac.uk shellsetup_example.sh compute
 ```
 `sunpyter.sh` executes some code on the remote 
 machine (here, `vnc.sunbird.swansea.ac.uk`), parses the output of that command,
@@ -14,12 +14,12 @@ starts a ssh tunnel and opens a web page using eiter the `xdg-open` (linux?) or
 ### Compute vs Login
 The command 
 ```
-./sunpyter.sh s.michele.mesiti@vnc.sunbird.swansea.ac.uk compute
+./sunpyter.sh s.michele.mesiti@vnc.sunbird.swansea.ac.uk shellsetup_example.sh compute
 ```
 starts a jupyter notebook server on a compute node via `sbatch`.
 The command 
 ```
-./sunpyter.sh s.michele.mesiti@vnc.sunbird.swansea.ac.uk login
+./sunpyter.sh s.michele.mesiti@vnc.sunbird.swansea.ac.uk shellsetup_example.sh login
 ```
 starts a jupyter notebook server on the login node. 
 The command launched with the `login` argument does not currently work on 
@@ -31,9 +31,16 @@ The code executed on the remote machine starts a jupyter notebook in the home
 directory, using a provisional conda environment created only for demonstration
 purposes.
 
-By modifying the `launch_jupyter_preamble.sh` file, a user can change the conda
-environment, the working directory and the slurm partition used in `compute` 
-mode.
+The files `launch_jupyter_preamble.sh`, the "shell setup" script passed as the 
+second argument, and one between `launch_jupyter_login.sh` and 
+`launch_jupyter_compute.sh` are concatenated together and executed on the 
+remote node via ssh.
+
+By passing another file instead of `shellsetup_example.sh` as a command line 
+argument, a user can change the conda environment and the working directory. 
+The slurm partition used in `compute` mode can be changed in the 
+`launch_jupyter_compute.sh` script. 
+
 
 ## TODO 
 - [ ] Make sure it works on Mac
