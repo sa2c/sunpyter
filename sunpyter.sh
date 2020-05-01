@@ -110,8 +110,6 @@ ssh -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
 SSHTUNNELPROC=$( ps -ef | grep ssh | grep $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT | grep -v grep | awk '{print $2}')
 echo SSHTUNNELPROC=$SSHTUNNELPROC
 
-export SLURMJOB=$(cat jupyter_log.txt | tr -d '\000' | grep "Submitted batch job" | awk '{print $4}' 2> /dev/null)
-echo "SLURM JOB:$SLURMJOB"
 
 # chosing program to open link.
 which open &> /dev/null && OPEN=open 
@@ -126,14 +124,25 @@ $OPEN http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
 ###############
 
 cleanup(){
+    export SLURMJOB=$(cat jupyter_log.txt | tr -d '\000' | grep "Submitted batch job" | awk '{print $4}' 2> /dev/null)
+    echo "SLURM JOB:$SLURMJOB"
+    
+    export JUPYTER_PROCESS=$(cat jupyter_log.txt | tr -d '\000' | grep "JUPYTER_PROCESS" | awk '{print $2}' 2> /dev/null)
+    echo "JUPYTER_PROCESS: $JUPYTER_PROCESS"
 
     echo "Sumpyter job:$SLURMJOB"
     # Kill remote job on sunbird
-    if [ -z "$SLUBMJOB" ]
+    if ! [ -z "$SLURMJOB" ]
     then 
         echo ssh $REMOTE "scancel $SLURMJOB"
-        ssh $REMOTE "scancel $SLURMJOB" || echo "Problem"
+        ssh $REMOTE "scancel $SLURMJOB" 
     fi
+    if ! [ -z "$JUPYTER_PROCESS" ]
+    then 
+        echo ssh $REMOTE "kill $JUPYTER_PROCESS"
+        ssh $REMOTE "kill $JUPYTER_PROCESS" 
+    fi
+ 
     echo kill $SSHPROC 
     echo kill $SSHTUNNELPROC
     kill $SSHPROC

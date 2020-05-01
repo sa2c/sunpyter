@@ -62,8 +62,10 @@ jupyter notebook on a compute node.
 - [ ] The `login` mode does not work on sl1 and sl2, only on vnc - to investigate.
 - [ ] The `--ip=*` option for jupyter notebook seemed to be necessary, but is 
       regarded as dangerous - to investigate.
-- [x] Add mechanism to kill remote notebook when the master script 
-      (`sunpyter.sh`) exits (if the user clicks "quit" it's ok, otherwise it 
-      will keep running!)
 - [x] Add mechanism to run on a compute node
+- [x] Add mechanism to kill remote notebook job on a *compute* node when the master 
+      script (`sunpyter.sh`) exits (if the user clicks "quit" it's ok, otherwise it 
+      will keep running!)
+- [ ] Add mechanism to kill remote notebook job on a login node in the same 
+      situation
 
