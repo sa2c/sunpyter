@@ -2,14 +2,22 @@ This is a small collection of shell scripts that should allow running
 jupyter notebooks on Sunbird without much effort.
 
 # Usage
+*This would greatly benefit from having a ssh authenticator agent running,
+so that you don't have to put your password in too many times.*
+
 From a terminal, use the command:
 ```bash
 ./sunpyter.sh config.sh
 ```
-`sunpyter.sh` starts the jupyter notebook on a remote machine, parses the output 
-of that command, starts a ssh tunnel and opens a web page pointing at the 
-jupyter notebook (using the authentication tokens provided by the server
-when it is starting).
+`sunpyter.sh` does the following:
+- starts the jupyter notebook server on a remote machine
+- parses the output of that command, collecting:
+  * the SLURM job ID number
+  * the remote port on which the jupyter notebook server is running
+  * the access token that is used to access the jupyter notebook server
+- starts a ssh tunnel and opens a web page pointing at the 
+  jupyter notebook (using the authentication tokens provided by the server
+  when it is starting).
 
 ## Config file
 A config file must be provided, which defines a number of environment 
@@ -54,6 +62,12 @@ The slurm partition used in `compute` mode can be changed in the
 ### `ACCOUNT`
 When `RUNWHERE` is set to `compute`, a slurm account is needed to launch the
 jupyter notebook on a compute node.
+
+# Notes
+The `launch_jupyter_preamble.sh` script, the `$SHELLSETUP` and the 
+`launch_jupyter_compute.sh` (or the `launch_jupyter_login.sh`) scripts are collated 
+into a single ssh script and executed on Sunbird login nodes in the first ssh invocation.
+
 
 
 ## TODO 
