@@ -2,66 +2,53 @@
 
 if [ $# -ne 1 ]
 then
-    echo "Usage: $0 <config>"
+    echo "Usage: $0 <your_sunbird_username>"
     exit
 fi
 
-CONFIG=$1
-source $CONFIG
+REMOTE=$1
+JUPYTER_LOG=jupyter_log.txt
 
-if [ -z "$REMOTE" ]
-then 
-    echo "Please give a remote, e.g. username@vnc.sunbird.swansea.ac.uk"
-    exit
-fi
+start_jupyter_and_write_log(){
+    local REMOTE=$1
+    local JUPYTER_LOG=$2
+    ssh $REMOTE 'bash -s' < remote_script.sh &> $JUPYTER_LOG &
+    
+}
 
-if [ -z "$ACCOUNT" -a "$RUNWHERE" == "compute" ]
-then 
-    echo "Please give an account, e.g. your project name (scwXXXX)"
-    exit
-fi
+start_jupyter_and_write_log $REMOTE $JUPYTER_LOG
 
-if [ -z "$SHELLSETUP" ]
-then 
-    echo "Please give the name of a file containing the bash commands needed"
-    echo "to set up the environment, e.g. the commands to:"
-    echo "   1. Activate the right conda environment"
-    echo "   2. Change directory to the right location before starting the"
-    echo "      jupyter notebook process."
-    echo "Please see example."
-    exit
-fi
+get_ssh_process_id(){
+    local REMOTE=$1
+    local SSHPROC=$( ps -ef | grep ssh | grep $REMOTE | grep bash | grep -v grep | awk '{print $2}'| sort -n | tail -n 1)
+    echo $SSHPROC
+    
+}
 
-if [ "$RUNWHERE" == "compute" ]
-then 
-    LAUNCH_JUPYTER_COMMAND=launch_jupyter_compute.sh
-elif [ "$RUNWHERE" == "login" ]
-then
-    LAUNCH_JUPYTER_COMMAND=launch_jupyter_login.sh
-else
-    echo 'Wrong launch specification, use either "login" or "compute".'
-    exit
-fi
+SSHPROC=$(get_ssh_process_id $REMOTE)
 
-ssh $REMOTE 'bash -s' < <( cat launch_jupyter_preamble.sh "$SHELLSETUP" "$LAUNCH_JUPYTER_COMMAND" | sed 's/SEDACCOUNT/'$ACCOUNT'/') &> jupyter_log.txt &
-
-SSHPROC=$( ps -ef | grep ssh | grep $REMOTE | grep bash | grep -v grep | awk '{print $2}'| sort -n | tail -n 1)
 echo SSHPROC=$SSHPROC
 echo "Waiting for jupyter notebook to start on server..."
 
-RUNNINGCONFIRMATIONSTRING="Use Control-C to stop this server and shut down all kernels (twice to skip confirmation)."
-
 printf "Waiting..."
-while [ $(grep $RUNNINGCONFIRMATIONSTRING jupyter_log.txt 2>/dev/null | wc -l ) -eq 0 ]
-do
-    sleep 1
-    printf .
-done
+
+wait_for_jupyter_server_to_start(){
+    local JUPYTER_LOG=$1
+    local RUNNINGCONFIRMATIONSTRING="Use Control-C to stop this server and shut down all kernels (twice to skip confirmation)."
+    while [ $(grep $RUNNINGCONFIRMATIONSTRING $JUPYTER_LOG 2>/dev/null | wc -l ) -eq 0 ]
+    do
+        sleep 1
+        printf .
+    done
+}
+
+wait_for_jupyter_server_to_start $JUPYTER_LOG
+
 echo "Launched."
 
 echo "Output from the server:"
 echo "========================================================================"
-cat jupyter_log.txt
+cat $JUPYTER_LOG
 echo "========================================================================"
 
 # We have a running jupyter notebook server, hooray!
@@ -81,22 +68,36 @@ AUTH_TOKEN=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\2|')
 #############################
 # Finding a free local port #
 #############################
-JUPYTER_LOCAL_PORT=8888  # Start from this one 
 
-# different machines can have different commands for this
-CHECKPORTSS="ss -Htan | awk '{print \$4}' | cut -d':' -f2 | grep "
-CHECKPORTLSOF="lsof -i :"
+get_free_local_port(){
+    
+  JUPYTER_LOCAL_PORT=8888  # Start from this one 
+  
+  # different machines can have different commands for this
+  check_port_uses(){
 
-# Checking which command is available
-which ss &> /dev/null && CHECKPORT="$CHECKPORTSS"
-[ -z "$CHECKPORT" ] && which lsof &> /dev/null && CHECKPORT="$CHECKPORTLSOF"
+    local PORT=$1
 
-# iterating until we find a free port.
-while [ $( bash -s < <(echo "$CHECKPORT$JUPYTER_LOCAL_PORT") 2>/dev/null | wc -l) -gt 0 ]
-do 
+    check_port_ss(){
+      ss -Htan | awk '{print $4}' | cut -d':' -f2 | grep $PORT 2> /dev/null | wc -l
+    }
+    
+    check_port_lsof(){
+      lsof -i :$PORT 2>/dev/null | wc -l
+    }
+
+    check_port_lsof || check_port_ss
+  }
+  
+  # iterating until we find a free port.
+  while [ $(check_port_uses $JUPYTER_LOCAL_PORT ) -gt 0 ]
+  do 
     echo "Port $JUPYTER_LOCAL_PORT is in use, trying next..."
-    JUPYTER_LOCAL_PORT=$((JUPYTER_LOCAL_PORT+1))
-done
+    JUPYTER_LOCAL_PORT=$((JUPYTER_LOCAL_PORT + 1))
+  done
+}
+
+get_free_local_port
 
 echo "Using local port $JUPYTER_LOCAL_PORT"
 
@@ -110,14 +111,14 @@ ssh -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
 SSHTUNNELPROC=$( ps -ef | grep ssh | grep $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT | grep -v grep | awk '{print $2}')
 echo SSHTUNNELPROC=$SSHTUNNELPROC
 
-
 # chosing program to open link.
 which open &> /dev/null && OPEN=open 
 [ -z "$OPEN" ] && which xdg-open &> /dev/null && OPEN=xdg-open
 
 echo "Opening link..."
-echo $OPEN http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
 $OPEN http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
+echo "If nothing happens, copy and paste this link in your browser:"
+echo http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
 
 ###############
 # Cleaning up #
