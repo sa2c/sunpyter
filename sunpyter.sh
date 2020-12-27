@@ -43,7 +43,7 @@ trap cleanup EXIT #SIGINT SIGHUP
 start_jupyter_and_write_log(){
     local REMOTE=$1
     local JUPYTER_LOG=$2
-    ssh $REMOTE 'bash -s' < remote_script.sh &> $JUPYTER_LOG &
+    ssh $REMOTE 'bash -s' < <(sed 's/\r//' remote_script.sh) &> $JUPYTER_LOG &
     
 }
 
