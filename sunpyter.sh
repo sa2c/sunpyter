@@ -105,27 +105,7 @@ get_free_local_port(){
   local FREE_LOCAL_PORT=8888  # Start from this one 
   
   # different machines can have different commands for this
-  check_port_uses(){
-
-    local PORT=$1
-
-    check_port_ss(){
-      ss -Htan | awk '{print $4}' | cut -d':' -f2 | grep $PORT 2> /dev/null | wc -l
-    }
-    
-    check_port_lsof(){
-      lsof -i :$PORT 2>/dev/null | wc -l
-    }
-
-    check_port_netstat(){
-        (
-        netstat -an -p TCP | awk '{print $2}' | cut -d':' -f2 | grep $PORT 
-        netstat -an -p UDP | awk '{print $2}' | cut -d':' -f2 | grep $PORT 
-    ) 2> /dev/null | wc -l
-    }
-
-    check_port_lsof || check_port_ss || check_port_netstat
-  }
+  source ./check_port_uses.sh
   
   # iterating until we find a free port.
   while [ $(check_port_uses $FREE_LOCAL_PORT ) -gt 0 ]
@@ -151,6 +131,7 @@ SSHTUNNELPROC=$( ps -ef | grep ssh | grep $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_P
 echo SSHTUNNELPROC=$SSHTUNNELPROC
 
 # chosing program to open link.
+OPEN=""
 which open &> /dev/null && OPEN=open 
 [ -z "$OPEN" ] && which xdg-open &> /dev/null && OPEN=xdg-open
 
