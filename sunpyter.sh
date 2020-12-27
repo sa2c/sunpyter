@@ -44,19 +44,10 @@ start_jupyter_and_write_log(){
     local REMOTE=$1
     local JUPYTER_LOG=$2
     ssh $REMOTE 'bash -s' < <(sed 's/\r//' remote_script.sh) &> $JUPYTER_LOG &
-    
+    SSHPROC=$!
 }
 
 start_jupyter_and_write_log $REMOTE $JUPYTER_LOG
-
-get_ssh_process_id(){
-    local REMOTE=$1
-    local SSHPROC=$( ps -ef | grep ssh | grep $REMOTE | grep bash | grep -v grep | awk '{print $2}'| sort -n | tail -n 1)
-    echo $SSHPROC
-    
-}
-
-SSHPROC=$(get_ssh_process_id $REMOTE)
 
 echo SSHPROC=$SSHPROC
 echo "Waiting for jupyter notebook to start on server..."
