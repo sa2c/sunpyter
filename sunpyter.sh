@@ -1,12 +1,12 @@
 #!/bin/bash --login
-
+set -euo pipefail
 
 if [ $# -ne 1 ]
 then
     echo "Usage: $0 <your_sunbird_username>"
     exit
 fi
-REMOTE=$1
+REMOTE=$1@sunbird.swansea.ac.uk
 # for scraping
 JUPYTER_LOG=jupyter_log.txt
 
@@ -117,7 +117,14 @@ get_free_local_port(){
       lsof -i :$PORT 2>/dev/null | wc -l
     }
 
-    check_port_lsof || check_port_ss
+    check_port_netstat(){
+        (
+        netstat -an -p TCP | awk '{print $2}' | cut -d':' -f2 | grep $PORT 
+        netstat -an -p UDP | awk '{print $2}' | cut -d':' -f2 | grep $PORT 
+    ) 2> /dev/null | wc -l
+    }
+
+    check_port_lsof || check_port_ss || check_port_netstat
   }
   
   # iterating until we find a free port.
