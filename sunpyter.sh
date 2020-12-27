@@ -1,13 +1,44 @@
 #!/bin/bash --login
 
+
 if [ $# -ne 1 ]
 then
     echo "Usage: $0 <your_sunbird_username>"
     exit
 fi
-
 REMOTE=$1
+# for scraping
 JUPYTER_LOG=jupyter_log.txt
+
+cleanup(){
+    export SLURMJOB=$(cat $JUPYTER_LOG | tr -d '\000' | grep "Submitted batch job" | awk '{print $4}' 2> /dev/null)
+    echo "SLURM JOB:$SLURMJOB"
+    
+    export JUPYTER_PROCESS=$(cat $JUPYTER_LOG | tr -d '\000' | grep "JUPYTER_PROCESS" | awk '{print $2}' 2> /dev/null)
+    echo "JUPYTER_PROCESS: $JUPYTER_PROCESS"
+
+    echo "Sumpyter job:$SLURMJOB"
+    # Kill remote job on sunbird
+    if ! [ -z "$SLURMJOB" ]
+    then 
+        echo ssh $REMOTE "scancel $SLURMJOB"
+        ssh $REMOTE "scancel $SLURMJOB" 
+    fi
+    if ! [ -z "$JUPYTER_PROCESS" ]
+    then 
+        echo ssh $REMOTE "kill $JUPYTER_PROCESS"
+        ssh $REMOTE "kill $JUPYTER_PROCESS" 
+    fi
+ 
+    echo kill $SSHPROC 
+    echo kill $SSHTUNNELPROC
+    kill $SSHPROC
+    kill $SSHTUNNELPROC
+    
+}
+trap cleanup EXIT #SIGINT SIGHUP
+
+
 
 start_jupyter_and_write_log(){
     local REMOTE=$1
@@ -52,9 +83,9 @@ cat $JUPYTER_LOG
 echo "========================================================================"
 
 # We have a running jupyter notebook server, hooray!
-############################################################
-# MINING THE OUTPUT OF THE COMMAND TO FIND CONNECTION INFO #
-############################################################
+##############################################################
+# SCRAPING THE OUTPUT OF THE COMMAND TO FIND CONNECTION INFO #
+##############################################################
 
 # The command to create the tunnel contains the host and the port, and that 
 # comes from the script running on sunbird.
@@ -71,7 +102,7 @@ AUTH_TOKEN=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\2|')
 
 get_free_local_port(){
     
-  JUPYTER_LOCAL_PORT=8888  # Start from this one 
+  local FREE_LOCAL_PORT=8888  # Start from this one 
   
   # different machines can have different commands for this
   check_port_uses(){
@@ -90,14 +121,15 @@ get_free_local_port(){
   }
   
   # iterating until we find a free port.
-  while [ $(check_port_uses $JUPYTER_LOCAL_PORT ) -gt 0 ]
+  while [ $(check_port_uses $FREE_LOCAL_PORT ) -gt 0 ]
   do 
-    echo "Port $JUPYTER_LOCAL_PORT is in use, trying next..."
-    JUPYTER_LOCAL_PORT=$((JUPYTER_LOCAL_PORT + 1))
+    echo "Port $FREE_LOCAL_PORT is in use, trying next..." 1>&2
+    FREE_LOCAL_PORT=$((FREE_LOCAL_PORT + 1))
   done
+  echo $FREE_LOCAL_PORT
 }
 
-get_free_local_port
+JUPYTER_LOCAL_PORT=$(get_free_local_port)
 
 echo "Using local port $JUPYTER_LOCAL_PORT"
 
@@ -123,34 +155,5 @@ echo http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
 ###############
 # Cleaning up #
 ###############
-
-cleanup(){
-    export SLURMJOB=$(cat jupyter_log.txt | tr -d '\000' | grep "Submitted batch job" | awk '{print $4}' 2> /dev/null)
-    echo "SLURM JOB:$SLURMJOB"
-    
-    export JUPYTER_PROCESS=$(cat jupyter_log.txt | tr -d '\000' | grep "JUPYTER_PROCESS" | awk '{print $2}' 2> /dev/null)
-    echo "JUPYTER_PROCESS: $JUPYTER_PROCESS"
-
-    echo "Sumpyter job:$SLURMJOB"
-    # Kill remote job on sunbird
-    if ! [ -z "$SLURMJOB" ]
-    then 
-        echo ssh $REMOTE "scancel $SLURMJOB"
-        ssh $REMOTE "scancel $SLURMJOB" 
-    fi
-    if ! [ -z "$JUPYTER_PROCESS" ]
-    then 
-        echo ssh $REMOTE "kill $JUPYTER_PROCESS"
-        ssh $REMOTE "kill $JUPYTER_PROCESS" 
-    fi
- 
-    echo kill $SSHPROC 
-    echo kill $SSHTUNNELPROC
-    kill $SSHPROC
-    kill $SSHTUNNELPROC
-    
-}
-
-trap cleanup EXIT SIGINT SIGHUP
 
 wait
