@@ -1,5 +1,7 @@
 #!/bin/bash --login
 set -eu
+source ./find_resources.sh
+source ./cleanup.sh
 
 if [ $# -ne 1 ]
 then
@@ -7,59 +9,13 @@ then
     exit
 fi
 REMOTE=$1@sunbird.swansea.ac.uk
-# for scraping
-JUPYTER_LOG=jupyter_log.txt
-
-find_free_ssh_socket(){
-    local ISOCKET=1 
-    SSH_SOCKET=/tmp/.ssh-sunpyter.$ISOCKET
-    while [ -S "$SSH_SOCKET" ]
-    do
-      ISOCKET=$((ISOCKET+1))
-      SSH_SOCKET=/tmp/.ssh-sunpyter.$ISOCKET
-    done
-    echo $SSH_SOCKET
-}
-
+JUPYTER_LOG=jupyter_log.txt # for scraping
 SSH_MASTER_SOCKET=$(find_free_ssh_socket)
 echo "Free socket for ssh_master: ${SSH_MASTER_SOCKET}"
-cleanup(){
-    echo
-    echo "====================="
-    echo "==     CLEANUP     =="
-    echo "====================="
-    export SLURMJOB=$(cat $JUPYTER_LOG | tr -d '\000' | grep "Submitted batch job" | awk '{print $4}' 2> /dev/null)
-    if [ ! -z "${SLURMJOB}" ]
-    then
-        echo "Remote Slurm-Jupyter Job: $SLURMJOB"
-    else
-        echo "Remote Slurm-Jupyter Job: None"
-    fi
-   
-    export JUPYTER_PROCESS=$(cat $JUPYTER_LOG | tr -d '\000' | grep "JUPYTER_PROCESS" | awk '{print $2}' 2> /dev/null)
 
-    if [ ! -z "${JUPYTER_PROCESS}" ]
-    then
-        echo "Remote Jupyter process: $JUPYTER_PROCESS"
-    else
-        echo "Remote Jupyter process: None"
-    fi
-
-    # Kill remote job on sunbird
-    if ! [ -z "$SLURMJOB" ]
-    then 
-        echo ssh -S ${SSH_MASTER_SOCKET} $REMOTE \"scancel $SLURMJOB\" 
-        ssh -S ${SSH_MASTER_SOCKET} $REMOTE "scancel $SLURMJOB" 
-    fi
-    if ! [ -z "$JUPYTER_PROCESS" ]
-    then 
-        echo ssh -S ${SSH_MASTER_SOCKET} $REMOTE \"kill $JUPYTER_PROCESS\" 
-        ssh -S ${SSH_MASTER_SOCKET} $REMOTE "kill $JUPYTER_PROCESS" 
-    fi
-
-    ssh -S ${SSH_MASTER_SOCKET} -O exit $REMOTE
-    
-}
+###############
+# Cleaning up #
+###############
 
 trap cleanup EXIT #SIGINT SIGHUP
 
@@ -112,22 +68,6 @@ AUTH_TOKEN=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\2|')
 # Finding a free local port #
 #############################
 
-get_free_local_port(){
-    
-    local FREE_LOCAL_PORT=8888  # Start from this one 
-    
-    # different machines can have different commands for this
-    source ./check_port_uses.sh
-    
-    # iterating until we find a free port.
-    while [ $(check_port_uses $FREE_LOCAL_PORT ) -gt 0 ]
-    do 
-      echo "Port $FREE_LOCAL_PORT is in use, trying next..." 1>&2
-      FREE_LOCAL_PORT=$((FREE_LOCAL_PORT + 1))
-    done
-    echo $FREE_LOCAL_PORT
-}
-
 JUPYTER_LOCAL_PORT=$(get_free_local_port)
 
 echo "Using local port $JUPYTER_LOCAL_PORT"
@@ -141,17 +81,35 @@ echo ssh -S ${SSH_MASTER_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -f
 ssh -S ${SSH_MASTER_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
 
 # chosing program to open link.
-OPEN=""
-which open &> /dev/null && OPEN=open 
-[ -z "$OPEN" ] && which xdg-open &> /dev/null && OPEN=xdg-open
+find_program_to_open_link(){
+    local OPEN=""
+    if which open &> /dev/null
+    then
+        echo open
+    elif which xdg-open &> /dev/null
+    then
+        echo xdg-open
+    else
+        echo
+    fi
+}
 
+OPEN=$(find_program_to_open_link)
+
+echo "Found program: $OPEN"
+
+if which $OPEN &> /dev/null
+then
 echo "Opening link..."
-#$OPEN http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
-echo "If nothing happens, copy and paste this link in your browser:"
-echo http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
+echo $OPEN "http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN"
+$OPEN "http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN"
+fi
 
-###############
-# Cleaning up #
-###############
+echo "If nothing happens, copy and paste this link in your browser:"
+echo
+echo http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
+echo
+echo REMEMBER: TERMINATE YOUR JOB WITH CTRL+C WHEN YOU ARE DONE.
+echo
 
 wait
