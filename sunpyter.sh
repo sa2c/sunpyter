@@ -8,16 +8,16 @@ then
     echo "Usage: $0 <your_sunbird_username>"
     exit
 fi
+trap cleanup EXIT
+
+eval $(ssh-agent) # sets SSH_AGENT_PID
+ssh-add ~/.ssh/id_rsa
+
 REMOTE=$1@sunbird.swansea.ac.uk
 JUPYTER_LOG=jupyter_log.txt # for scraping
 SSH_MASTER_SOCKET=$(find_free_ssh_socket)
 echo "Free socket for ssh_master: ${SSH_MASTER_SOCKET}"
 
-###############
-# Cleaning up #
-###############
-
-trap cleanup EXIT #SIGINT SIGHUP
 
 start_jupyter_and_write_log(){
     local REMOTE=$1

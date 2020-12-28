@@ -5,6 +5,7 @@ set -eu
 # - JUPYTER_LOG
 # - SSH_MASTER_SOCKET
 # - REMOTE
+# - SSH_AGENT_PID
 cleanup(){
     echo
     echo "====================="
@@ -19,7 +20,6 @@ cleanup(){
     fi
    
     export JUPYTER_PROCESS=$(cat $JUPYTER_LOG | tr -d '\000' | grep "JUPYTER_PROCESS" | awk '{print $2}' 2> /dev/null)
-
     if [ ! -z "${JUPYTER_PROCESS}" ]
     then
         echo "Remote Jupyter process: $JUPYTER_PROCESS"
@@ -40,5 +40,14 @@ cleanup(){
     fi
 
     ssh -S ${SSH_MASTER_SOCKET} -O exit $REMOTE
-    
+
+    echo "Terminating our ssh agent:"
+    echo kill ${SSH_AGENT_PID}
+    kill ${SSH_AGENT_PID}
+    echo
+    echo "====================="
+    echo "==  CLEANUP  DONE  =="
+    echo "== HAVE A NICE DAY =="
+    echo "====================="
+   
 }
