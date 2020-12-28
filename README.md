@@ -52,3 +52,13 @@ At the end (see `cleanup.sh`):
 - the remote slurm job is canceled
 - the ssh processes are killed 
 - the ssh agent is killed
+
+# Notes
+Tested on:
+- Arch linux,
+  - Bash 5.0.18, 
+  - openSSH8.4p1, OpenSSL1.1.1h, 22 Sep 2020
+- Git Bash
+  - Bash 4.4.23, 
+  - openSSH8.4p1, OpenSSL1.1.1h, 22 Sep 2020
+   
