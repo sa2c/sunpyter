@@ -10,19 +10,19 @@ REMOTE=$1@sunbird.swansea.ac.uk
 # for scraping
 JUPYTER_LOG=jupyter_log.txt
 
-find_free_socket_for_ssh_master(){
+find_free_ssh_socket(){
     local ISOCKET=1 
-    SSH_MASTER_SOCKET=/tmp/.ssh-sunpyter.$ISOCKET
-    while [ -f "$SSH_MASTER_SOCKET" ]
+    SSH_SOCKET=/tmp/.ssh-sunpyter.$ISOCKET
+    while [ -S "$SSH_SOCKET" ]
     do
       ISOCKET=$((ISOCKET+1))
-      SSH_MASTER_SOCKET=/tmp/.ssh-sunpyter.$ISOCKET
+      SSH_SOCKET=/tmp/.ssh-sunpyter.$ISOCKET
     done
-    echo "Free socket for ssh_master: ${SSH_MASTER_SOCKET}"
+    echo $SSH_SOCKET
 }
 
-find_free_socket_for_ssh_master
-
+SSH_MASTER_SOCKET=$(find_free_ssh_socket)
+echo "Free socket for ssh_master: ${SSH_MASTER_SOCKET}"
 cleanup(){
     echo
     echo "====================="
@@ -57,8 +57,8 @@ cleanup(){
         ssh -S ${SSH_MASTER_SOCKET} $REMOTE "kill $JUPYTER_PROCESS" 
     fi
 
-    echo ssh -S ${SSH_MASTER_SOCKET} -O exit $REMOTE
     ssh -S ${SSH_MASTER_SOCKET} -O exit $REMOTE
+    ssh -S ${SSH_TUNNEL_SOCKET} -O exit $REMOTE
     
 }
 
@@ -137,9 +137,11 @@ echo "Using local port $JUPYTER_LOCAL_PORT"
 # Starting SSH port forwarding #
 ################################
 
+SSH_TUNNEL_SOCKET=$(find_free_ssh_socket)
+echo "Free socket for ssh tunnel: ${SSH_TUNNEL_SOCKET}"
 echo "Creating ssh tunnnel:"
-echo ssh -S ${SSH_MASTER_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
-ssh -S ${SSH_MASTER_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
+echo ssh -S ${SSH_TUNNEL_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
+ssh -S ${SSH_TUNNEL_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
 
 # chosing program to open link.
 OPEN=""
