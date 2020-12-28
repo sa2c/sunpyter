@@ -14,10 +14,11 @@ check_port_lsof(){
 
 check_port_netstat(){
     export local PORT=$1
-    which netstat &> /dev/null && (
-    netstat -an -p TCP 2> /dev/null | awk '{print $2}' | cut -d':' -f2 | grep $PORT 
-    netstat -an -p UDP 2> /dev/null | awk '{print $2}' | cut -d':' -f2 | grep $PORT 
-    ) | wc -l
+    which netstat &> /dev/null && \
+    netstat -an 2> /dev/null |\
+    awk '{print $2}' | \
+    awk 'BEGIN{FS=":"};{print $NF}' | \
+    grep $PORT | wc -l
 }
 
 check_port_uses(){

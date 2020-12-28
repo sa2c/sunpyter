@@ -58,7 +58,6 @@ cleanup(){
     fi
 
     ssh -S ${SSH_MASTER_SOCKET} -O exit $REMOTE
-    ssh -S ${SSH_TUNNEL_SOCKET} -O exit $REMOTE
     
 }
 
@@ -137,11 +136,9 @@ echo "Using local port $JUPYTER_LOCAL_PORT"
 # Starting SSH port forwarding #
 ################################
 
-SSH_TUNNEL_SOCKET=$(find_free_ssh_socket)
-echo "Free socket for ssh tunnel: ${SSH_TUNNEL_SOCKET}"
 echo "Creating ssh tunnnel:"
-echo ssh -S ${SSH_TUNNEL_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
-ssh -S ${SSH_TUNNEL_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
+echo ssh -S ${SSH_MASTER_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
+ssh -S ${SSH_MASTER_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
 
 # chosing program to open link.
 OPEN=""
@@ -149,7 +146,7 @@ which open &> /dev/null && OPEN=open
 [ -z "$OPEN" ] && which xdg-open &> /dev/null && OPEN=xdg-open
 
 echo "Opening link..."
-$OPEN http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
+#$OPEN http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
 echo "If nothing happens, copy and paste this link in your browser:"
 echo http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
 
