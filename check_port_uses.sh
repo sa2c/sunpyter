@@ -4,25 +4,24 @@
 
 check_port_ss(){
     export local PORT=$1
-    which ss &> /dev/null && ss -Htan | awk '{print $4}' | cut -d':' -f2 | grep $PORT | wc -l
+    which ss &> /dev/null && ss -Htan 2> /dev/null | awk '{print $4}' | cut -d':' -f2 | grep $PORT | wc -l
 }
 
 check_port_lsof(){
     export local PORT=$1
-    which lsof &> /dev/null && lsof -i :$PORT| wc -l
+    which lsof &> /dev/null && lsof -i :$PORT 2> /dev/null | wc -l
 }
 
 check_port_netstat(){
     export local PORT=$1
     which netstat &> /dev/null && (
-    netstat -an -p TCP | awk '{print $2}' | cut -d':' -f2 | grep $PORT 
-    netstat -an -p UDP | awk '{print $2}' | cut -d':' -f2 | grep $PORT 
+    netstat -an -p TCP 2> /dev/null | awk '{print $2}' | cut -d':' -f2 | grep $PORT 
+    netstat -an -p UDP 2> /dev/null | awk '{print $2}' | cut -d':' -f2 | grep $PORT 
     ) | wc -l
 }
 
 check_port_uses(){
-
     local PORT=$1
-    check_port_lsof $PORT || check_port_ss $PORT|| check_port_netstat $PORT
+    check_port_lsof $PORT || check_port_ss $PORT || check_port_netstat $PORT
 }
 

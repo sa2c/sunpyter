@@ -1,5 +1,5 @@
 #!/bin/bash --login
-set -euo pipefail
+set -eu
 
 if [ $# -ne 1 ]
 then
@@ -67,7 +67,7 @@ trap cleanup EXIT #SIGINT SIGHUP
 start_jupyter_and_write_log(){
     local REMOTE=$1
     local JUPYTER_LOG=$2
-    ssh -S ${SSH_MASTER_SOCKET} -M $REMOTE 'bash -s' < <(sed 's/\r//' remote_script.sh) &> $JUPYTER_LOG &
+    ssh -4 -S ${SSH_MASTER_SOCKET} -M $REMOTE 'bash -s' < <(sed 's/\r//' remote_script.sh) &> $JUPYTER_LOG &
 }
 
 start_jupyter_and_write_log $REMOTE $JUPYTER_LOG
@@ -138,6 +138,7 @@ echo "Using local port $JUPYTER_LOCAL_PORT"
 ################################
 
 echo "Creating ssh tunnnel:"
+echo ssh -S ${SSH_MASTER_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
 ssh -S ${SSH_MASTER_SOCKET} -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
 
 # chosing program to open link.
