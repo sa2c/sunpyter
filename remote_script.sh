@@ -1,8 +1,8 @@
 #!/bin/bash 
-ACCOUNT=scw1000 #FIXME
+ACCOUNT=scw1738
 # This is a conda environment containing a jupyter notebook installation
-CONDA_ENV_PATH=/scratch/s.michele.mesiti/conda_example #FIXME
-WORKDIR=/scratch/s.michele.mesiti #FIXME
+CONDA_ENV_PATH=/scratch/s.michele.mesiti/dataaid
+WORKDIR=/cdt_storage/SED_USER
 
 # This step
 # sets up the jupyter notebook environment correctly.
@@ -11,7 +11,6 @@ WORKDIR=/scratch/s.michele.mesiti #FIXME
 module load anaconda/2020.07
 source activate $CONDA_ENV_PATH
 # Setting the working directory 
-cd $WORKDIR 
 
 LOG=~/sunpyter_log.txt
 rm -r $LOG
@@ -23,14 +22,26 @@ touch $LOG # to be able to monitor it
 chmod go-r $LOG
 # launching the job asynchroniously,
 # we can get the job id scraping the output
-sbatch --partition development \
+
+cat > job_script_sunpyter.sh <<SCRIPT_CONTENT
+#!/bin/bash
+if [ -d $WORKDIR ]
+then
+    jupyter notebook --notebook-dir $WORKDIR --no-browser --ip='*'
+else
+    echo "ERROR: $WORKDIR does not exist."
+    echo "ERROR: Make sure you do the necessary steps to create it first."
+fi
+SCRIPT_CONTENT
+
+sbatch --partition s_highmem_cdt \
     -A $ACCOUNT \
     -o $LOG \
     -J SUNPYTER \
     --dependency=singleton \
     -n 1 \
     --oversubscribe \
-    jupyter notebook --no-browser --ip='*'
+    job_script_sunpyter.sh
 
 # This is used to sends the output of the log
 # to the user's machine for scraping 

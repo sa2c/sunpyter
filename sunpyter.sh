@@ -13,7 +13,8 @@ trap cleanup EXIT
 eval $(ssh-agent) # sets SSH_AGENT_PID
 ssh-add ~/.ssh/id_rsa
 
-REMOTE=$1@sunbird.swansea.ac.uk
+USERNAME=$1
+REMOTE=$USERNAME@sunbird.swansea.ac.uk
 JUPYTER_LOG=jupyter_log.txt # for scraping
 SSH_MASTER_SOCKET=$(find_free_ssh_socket)
 echo "Free socket for ssh_master: ${SSH_MASTER_SOCKET}"
@@ -22,7 +23,7 @@ echo "Free socket for ssh_master: ${SSH_MASTER_SOCKET}"
 start_jupyter_and_write_log(){
     local REMOTE=$1
     local JUPYTER_LOG=$2
-    ssh -4 -S ${SSH_MASTER_SOCKET} -M $REMOTE 'bash -s' < <(sed 's/\r//' remote_script.sh) &> $JUPYTER_LOG &
+    ssh -4 -S ${SSH_MASTER_SOCKET} -M $REMOTE 'bash -s' < <(sed 's/\r//;s/SED_USER/'$USERNAME'/' remote_script.sh) &> $JUPYTER_LOG &
 }
 
 start_jupyter_and_write_log $REMOTE $JUPYTER_LOG
@@ -31,11 +32,22 @@ echo "Waiting for jupyter notebook to start on server..."
 
 printf "Waiting..."
 
+check_for_errors(){
+    FILE=$1
+    grep ERROR $FILE
+}
+
 wait_for_jupyter_server_to_start(){
     local JUPYTER_LOG=$1
     local RUNNINGCONFIRMATIONSTRING="Use Control-C to stop this server and shut down all kernels (twice to skip confirmation)."
     while [ $(grep $RUNNINGCONFIRMATIONSTRING $JUPYTER_LOG 2>/dev/null | wc -l ) -eq 0 ]
     do
+      if [ $(check_for_errors $JUPYTER_LOG | wc -l) -ne 0 ] 
+      then 
+        echo # new line for readability
+        check_for_errors $JUPYTER_LOG 
+        exit
+      fi 
       sleep 1
       printf .
     done
@@ -59,7 +71,10 @@ echo "========================================================================"
 # comes from the script running on sunbird.
 
 # This 'purification' is needed to prevent grep from misreading the file
-LINE=$(cat jupyter_log.txt | tr -d '\000' | grep -A 1 "The Jupyter Notebook is running at:" | tail -n 1)
+LINE=$(cat jupyter_log.txt | tr -d '\000' | grep -A 1 -E "Jupyter\s*Notebook.*is\s*running\s*at:" | tail -n 1) 
+
+echo Log Line with connection information:
+echo $LINE
 
 REMOTE_HOST_AND_PORT=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\1|')
 AUTH_TOKEN=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\2|')
