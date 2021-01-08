@@ -22,7 +22,7 @@ echo "Free socket for ssh_master: ${SSH_MASTER_SOCKET}"
 start_jupyter_and_write_log(){
     local REMOTE=$1
     local JUPYTER_LOG=$2
-    ssh -4 -S ${SSH_MASTER_SOCKET} -M $REMOTE 'bash -s' < <(sed 's/\r//;s/SED_USER/'$USERNAME'/' remote_script.sh) &> $JUPYTER_LOG &
+    ssh -S ${SSH_MASTER_SOCKET} -M $REMOTE 'bash -s' < <(sed 's/\r//;s/SED_USER/'$USERNAME'/' remote_script.sh) &> $JUPYTER_LOG &
     sleep 1 # for the ssh socket to be created
 }
 
