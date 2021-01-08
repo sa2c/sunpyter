@@ -8,7 +8,9 @@ jupyter notebooks on Sunbird without much effort.
   
 - Set up your ssh key in advance. 
 
-
+- Make sure your home directory on the cdt storage is created. 
+  This happens when you log in the first time on the CDT storage login node. 
+  
 # Usage
 
 1. From a terminal (or Git Bash on Windows),
