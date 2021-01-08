@@ -132,7 +132,10 @@ echo "If nothing happens, copy and paste this link in your browser:"
 echo
 echo http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
 echo
-echo REMEMBER: TERMINATE YOUR JOB WITH CTRL+C WHEN YOU ARE DONE.
+echo '                   REMEMBER:'
+echo '              WHEN YOU ARE DONE:'
+echo '          TERMINATE YOUR JOB WITH CTRL+C'
+echo ' OR USE THE "QUIT" BUTTON ON THE JUPYTER WEB INTERFACE.'
 echo
 
 wait

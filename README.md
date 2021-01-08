@@ -29,6 +29,8 @@ jupyter notebooks on Sunbird without much effort.
    to make sure that 
    the resources on Sunbird are released,
    press `Ctrl+C` in the terminal window.
+   Pressing the "Quit" button is also a good idea.
+   
 
 # Inner workings
 `sunpyter.sh` does the following:
@@ -50,7 +52,7 @@ jupyter notebooks on Sunbird without much effort.
 - Windows only: gives you a link,
   to open in your browser.
 
-At the end (see `cleanup.sh`):
+At the end, when you press `CTRL+C` (see `cleanup.sh`):
 - the remote slurm job is canceled
 - the ssh processes are killed 
 - the ssh agent is killed
