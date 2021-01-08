@@ -6,10 +6,12 @@ jupyter notebooks on Sunbird without much effort.
   the latest version of Git Bash 
   available.
   
-- Set up your ssh key in advance. 
+- Set up your ssh key in advance.
 
 - Make sure your home directory on the cdt storage is created. 
   This happens when you log in the first time on the CDT storage login node. 
+  
+- Make sure you check out the `CDT` branch, not `master`.
   
 # Usage
 
