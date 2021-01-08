@@ -64,3 +64,18 @@ Tested on:
   - Bash 4.4.23, 
   - openSSH8.4p1, OpenSSL1.1.1h, 22 Sep 2020
    
+# Troubleshooting
+  * **The script takes a long time "Waiting..." and nothing happens.**
+    It can take a couple of minutes. 
+    After that, you might have to ssh into `sunbird` 
+    and check the output of `squeue -u $USER`.
+    Notice: you can have only one jupyter job running on Sunbird.
+    If an old jupyter job of yours is still running, 
+    you will not be able to start a new one. 
+    Use `scancel` to kill the old one.
+  * **I get ERROR: /cdt_storage/<my_username> does not exist.**
+    You need to log into the CDT storage log in node 
+    to have your home directory created first.
+  * **It does not work with the Windows Subsystem for Linux**
+    This is a known issue, sorry. 
+    Use Git Bash instead.
