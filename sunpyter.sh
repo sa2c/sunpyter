@@ -10,11 +10,22 @@ then
 fi
 trap cleanup EXIT
 
-eval $(ssh-agent) # sets SSH_AGENT_PID
-ssh-add ~/.ssh/id_rsa
-
 USERNAME=$1
 REMOTE=$USERNAME@sunbird.swansea.ac.uk
+
+setup_ssh_agent(){
+    echo > .ssh_agent_setup
+    ssh -oBatchMode=yes $REMOTE "echo Passwordless access to Sunbird correctly set up." || (
+        echo "Creating new ssh agent" 
+        ssh-agent > .ssh_agent_setup # sets SSH_AGENT_PID
+        source .ssh_agent_setup
+        ssh-add ~/.ssh/id_rsa
+    )
+    source .ssh_agent_setup
+}
+
+setup_ssh_agent
+
 JUPYTER_LOG=jupyter_log.txt # for scraping
 SSH_MASTER_SOCKET=$(find_free_ssh_socket)
 echo "Free socket for ssh_master: ${SSH_MASTER_SOCKET}"
@@ -22,11 +33,12 @@ echo "Free socket for ssh_master: ${SSH_MASTER_SOCKET}"
 start_jupyter_and_write_log(){
     local REMOTE=$1
     local JUPYTER_LOG=$2
-    ssh -S ${SSH_MASTER_SOCKET} -M $REMOTE 'bash -s' < <(sed 's/\r//;s/SED_USER/'$USERNAME'/' remote_script.sh) &> $JUPYTER_LOG &
+    local REMOTE_SCRIPT=$3
+    ssh -S ${SSH_MASTER_SOCKET} -M $REMOTE 'bash -s' < <(sed 's/\r//;s/SED_USER/'$USERNAME'/' $REMOTE_SCRIPT) &> $JUPYTER_LOG &
     sleep 5 # BODGE - wait for the ssh socket to be created
 }
 
-start_jupyter_and_write_log $REMOTE $JUPYTER_LOG
+start_jupyter_and_write_log $REMOTE $JUPYTER_LOG remote_script.sh
 
 if [ -S ${SSH_MASTER_SOCKET} ]
 then
