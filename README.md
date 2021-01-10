@@ -2,25 +2,64 @@ This is a small collection of shell scripts that should allow running
 jupyter notebooks on Sunbird without much effort.
 
 # Preliminaries
-- Windows: Make sure you have 
+ 
+## Set up the SSH keys
+  Set up your ssh key in advance. 
+  This may require using `ssh-keygen` 
+  to create a public-private key pair 
+  (if you haven't already)
+  and `ssh-copy-id` to install the public key to sunbird.
+  
+### More detailed instructions
+  - Check if you have the files `~/.ssh/id_rsa`
+    and  `~/.ssh/id_rsa.pub`.
+    ("`~`" represents your home directory, 
+    in the Bash jargon).
+    **Only if these two files DO NOT exist**,
+    generate a public-private key pair with
+    ```
+    ssh-keygen -t rsa 
+    ```
+    Follow the instructions on screen,
+    and remember the passphrase.
+  - Install the key on the remote machine.
+    This step is safe.
+    ```
+    ssh-copy-id <your-username>@sunbird.swansea.ac.uk
+    ``` 
+    If you have already done that, 
+    you will get a message 
+    telling you that the keys already exist on the remote system.
+
+## Have your HOME created on the CDT storage
+  Make sure your home directory on the cdt storage is created. 
+  This happens when you log in the first time on the CDT storage login node. 
+
+## Use the CDT branch
+ Make sure you check out the `CDT` branch, not `master`.
+
+## Notes on **Windows**
+  Make sure you have 
   the latest version of Git Bash 
   available.
-  
-- Set up your ssh key in advance.
 
-- Make sure your home directory on the cdt storage is created. 
-  This happens when you log in the first time on the CDT storage login node. 
-  
-- Make sure you check out the `CDT` branch, not `master`.
-  
+# Test your system first.
+  A bunch of tests 
+  to make sure that `sunpyter` can run correctly 
+  is contained in the script `test.sh`.
+  Please run that first.
+
 # Usage
 
+0. Run `test.sh` 
+   and please follow the messages on screen.
+   Please report anything suspicious.
 1. From a terminal (or Git Bash on Windows),
    use the command:
    ```bash
    ./sunpyter.sh  <your_username_on_sunbird>
    ```
-2. Type the passphrase for your key,
+2. Type the passphrase for your ssh key,
 3. Wait
 4. `sunpyter` will 
    either open a browser window 

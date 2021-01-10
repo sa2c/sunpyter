@@ -2,11 +2,11 @@
 
 find_free_ssh_socket(){
     local ISOCKET=1 
-    SSH_SOCKET=/tmp/.ssh-sunpyter.$ISOCKET
+    SSH_SOCKET=./.ssh-sunpyter.$ISOCKET
     while [ -S "$SSH_SOCKET" ]
     do
       ISOCKET=$((ISOCKET+1))
-      SSH_SOCKET=/tmp/.ssh-sunpyter.$ISOCKET
+      SSH_SOCKET=./.ssh-sunpyter.$ISOCKET
     done
     echo $SSH_SOCKET
 }
