@@ -19,7 +19,10 @@ test_cdt_branch &&
 test_ssh_agent &&
 test_ssh_socket_creation &&
 (
-    test_ssHtan ||
-    test_lsofi || 
-    test_netstatan
+    echo 
+    echo "#####################################"
+    echo "# Testing ways of checking ports... #"
+    echo "#####################################"
+    (test_ssHtan && echo "Other ways will not be tested") ||
+    (test_lsofi && echo "Other ways will not be tested") || (test_netstatan && echo "Other ways will not be tested") 
 )

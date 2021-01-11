@@ -34,6 +34,7 @@ test_ssh_socket_creation(){
     echo
     echo "======================================================"
     echo "Testing ssh socket creation"
+    echo "(this will take ~15 seconds)"
     echo "======================================================"
     source ./find_resources.sh
     SSH_SOCKET=$(find_free_ssh_socket)
@@ -42,7 +43,7 @@ test_ssh_socket_creation(){
     sleep 5
     if [ -S ${SSH_SOCKET} ]
     then
-        echo "SSH socket created, wait 10 seconds..."
+        echo "SSH socket created, wait ~10 seconds..."
         wait
         cat test_log.txt
         echo "Test was successful"
