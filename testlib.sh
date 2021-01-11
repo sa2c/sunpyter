@@ -27,7 +27,7 @@ test_ssh_agent(){
     ssh-add ~/.ssh/id_rsa
     echo "We'll now try to connect to sunbird.swansea.ac.uk"
     echo "If you are requested your SCW password, this test has failed."
-    ssh $SUNBIRD_USERNAME@sunbird.swansea.ac.uk "echo Connected, hopefully without password."
+    ssh $REMOTE "echo Connected, hopefully without password."
 }
 
 test_ssh_socket_creation(){
@@ -38,7 +38,7 @@ test_ssh_socket_creation(){
     source ./find_resources.sh
     SSH_SOCKET=$(find_free_ssh_socket)
     echo "Trying with socket: ${SSH_SOCKET}"
-    ssh -S ${SSH_SOCKET} -M $SUNBIRD_USERNAME@sunbird.swansea.ac.uk "sleep 15; echo Remote process done." &> test_log.txt &
+    ssh -S ${SSH_SOCKET} -M $REMOTE "sleep 15; echo Remote process done." &> test_log.txt &
     sleep 5
     if [ -S ${SSH_SOCKET} ]
     then
@@ -64,6 +64,7 @@ test_ssHtan(){
     ss -Htan > /dev/null  && echo "Test was successful" || (
             echo "ss -Htan does not work on your system"
             echo "you may still be ok if lsof or netstat work."
+            return 1
         )
 }
 
@@ -76,6 +77,7 @@ test_lsofi(){
     lsof -i :8888 > /dev/null  && echo "Test was successful" || (
             echo "lsof -i :<port number> does not work on your system"
             echo "you may still be ok if ss or netstat work."
+            return 1
         )
 }
 
@@ -88,6 +90,7 @@ test_netstatan(){
     netstat -an > /dev/null  && echo "Test was successful" ||  (
             echo "netstat -an does not work on your system"
             echo "you may still be ok if ss or lsof work."
+            return 1
         )
 }
 
