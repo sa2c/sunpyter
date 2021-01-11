@@ -25,7 +25,7 @@ jupyter notebooks on Sunbird without much effort.
   - Install the key on the remote machine.
     This step is safe.
     ```
-    ssh-copy-id <your-username>@sunbird.swansea.ac.uk
+    ssh-copy-id your-username-here@sunbird.swansea.ac.uk
     ``` 
     If you have already done that, 
     you will get a message 
