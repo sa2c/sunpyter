@@ -15,9 +15,11 @@ REMOTE=$USERNAME@sunbird.swansea.ac.uk
 
 setup_ssh_agent(){
     echo > .ssh_agent_setup
+    export SUNPYTER_SSH_AGENT='false'
     ssh -oBatchMode=yes $REMOTE "echo Passwordless access to Sunbird correctly set up." || (
         echo "Creating new ssh agent" 
         ssh-agent > .ssh_agent_setup # sets SSH_AGENT_PID
+        echo "export SUNPYTER_SSH_AGENT=true" >> .ssh_agent_setup
         source .ssh_agent_setup
         ssh-add ~/.ssh/id_rsa
     )

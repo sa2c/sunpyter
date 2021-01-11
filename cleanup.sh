@@ -41,13 +41,16 @@ cleanup(){
 
     ssh -S ${SSH_MASTER_SOCKET} -O exit $REMOTE
 
-    echo "Terminating our ssh agent:"
-    echo kill ${SSH_AGENT_PID}
-    kill ${SSH_AGENT_PID}
+    if [ $SUNPYTER_SSH_AGENT == "true" ]
+    then
+        echo "Terminating our ssh agent:"
+        echo kill ${SSH_AGENT_PID}
+        kill ${SSH_AGENT_PID}
+    fi
     echo
     echo "====================="
     echo "==  CLEANUP  DONE  =="
     echo "== HAVE A NICE DAY =="
     echo "====================="
-   
+    
 }
