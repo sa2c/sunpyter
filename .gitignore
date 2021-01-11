@@ -1,3 +1,4 @@
 jupyter_log.txt
 test_log.txt
 .ssh_agent_setup
+copy_files_remote.sh
