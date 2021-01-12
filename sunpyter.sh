@@ -147,9 +147,11 @@ echo
 echo http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
 echo
 echo '                     REMEMBER:'
+echo '              KEEP THIS TERMINAL OPEN.'
 echo '                 WHEN YOU ARE DONE:'
 echo ' CLICK ON THE "QUIT" BUTTON ON THE JUPYTER WEB INTERFACE.'
-echo '         AND TERMINATE THIS PROCESS WITH CTRL+C'
+echo '        AND TERMINATE THIS PROCESS WITH CTRL+C.'
+echo '      THEN YOU CAN CLOSE THE TERMINAL IF YOU WISH.'
 echo
 
 wait
