@@ -4,6 +4,10 @@ ACCOUNT=scw1738
 CONDA_ENV_PATH=/scratch/s.michele.mesiti/dataaid
 WORKDIR=/cdt_storage/SED_USER
 
+export JUPYTER_CONFIG_DIR=$CONDA_ENV_PATH/etc/jupyter
+export JUPYTER_DATA_DIR=$CONDA_ENV_PATH/share/jupyter
+export JUPYTER_RUNTIME_DIR=$WORKDIR/.local/share/jupyter
+
 # This step
 # sets up the jupyter notebook environment correctly.
 # 1 activation of a conda environment;
