@@ -14,14 +14,14 @@ Follow the instructions on screen,
 and remember the passphrase.
 
 These are the expected steps:
-* type `ssh-keygen -t rsa` and press `return`.
+* type `ssh-keygen -t rsa` and press enter.
 * You will get the output
   ```
   Generating public/private rsa key pair.
   Enter file in which to save the key (/path/to/your/home/directory/.ssh/id_rsa):
   ```
   If you do not have already a file called `~/.ssh/id_rsa`,
-  you can just press `return` here 
+  you can just press enter here 
   and use the default location displayed in brackets.
 * You will then get
   ```
@@ -58,12 +58,48 @@ These are the expected steps:
   ```
   If so, then you've configured your ssh keys correctly.   
 
-## SSH keys installation
-Install the key on the remote machine.
-This step is safe.
+## SSH keys installation on Sunbird
+After this step 
+we will be able to connect to Sunbird
+without typing your password.
+This is extremely convenient
+because Sunpyter needs to 
+connect to sunbird many times on your behalf.
+Without this step,
+you would be asked 
+to type in your password
+many times in unexpected situations,
+and this is something that can lead to errors.
+To install the key on the remote machine 
+(Sunbird in this case)
 ```
 ssh-copy-id your-username-here@sunbird.swansea.ac.uk
 ``` 
-If you have already done that, 
+If you have already done that in the past, 
 you will get a message 
 telling you that the keys already exist on the remote system.
+
+
+## SSH key installation on GitHub
+You can use the same key 
+to deal with authentication on GitHub.
+You may need to type in 
+your github password at some point,
+so keep it ready.
+
+In order to do so,
+1. In your browser, 
+   go to `https://github.com/settings/ssh/new`.  
+2. In your terminal,
+   print to screen
+   the content of `~/.ssh/id_rsa.pub`:
+   ```
+   cat ~/.ssh/id_rsa.pub
+   ```
+   Select the text that is displayed
+   and copy it to your browser tab
+   on the github website, 
+   in the **Key** text field.
+3. Click the green "**Add SSH key**" button.
+
+
