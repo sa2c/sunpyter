@@ -86,6 +86,9 @@ Tested on:
 - Arch linux,
   - Bash 5.0.18, 
   - openSSH8.4p1, OpenSSL1.1.1h, 22 Sep 2020
+- Mac OS X 10.14
+  - Bash 3.2.57
+  - OpenSSH_7.9p1, LibreSSL 2.7.3
 - Git Bash (*auto-open not working*)
   - Bash 4.4.23, 
   - openSSH8.4p1, OpenSSL1.1.1h, 22 Sep 2020
