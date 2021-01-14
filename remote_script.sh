@@ -5,6 +5,9 @@ CONDA_ENV_PATH=/scratch/s.michele.mesiti/dataaid
 WORKDIR=/cdt_storage/$USER
 
 export JUPYTER_CONFIG_DIR=$CONDA_ENV_PATH/etc/jupyter
+
+# This directory contains also the notebook secret, 
+# so it must be owned by the user.
 export JUPYTER_DATA_DIR=$WORKDIR/share/jupyter
 export JUPYTER_RUNTIME_DIR=$WORKDIR/.local/share/jupyter
 
