@@ -2,7 +2,7 @@
 ACCOUNT=scw1738
 # This is a conda environment containing a jupyter notebook installation
 CONDA_ENV_PATH=/scratch/s.michele.mesiti/dataaid
-WORKDIR=/cdt_storage/SED_USER
+WORKDIR=/cdt_storage/$USER
 
 export JUPYTER_CONFIG_DIR=$CONDA_ENV_PATH/etc/jupyter
 export JUPYTER_DATA_DIR=$CONDA_ENV_PATH/share/jupyter

@@ -36,7 +36,7 @@ start_jupyter_and_write_log(){
     local REMOTE=$1
     local JUPYTER_LOG=$2
     local REMOTE_SCRIPT=$3
-    ssh -S ${SSH_MASTER_SOCKET} -M $REMOTE 'bash -s' < <(sed 's/SED_USER/'$USERNAME'/' $REMOTE_SCRIPT) &> $JUPYTER_LOG &
+    ssh -S ${SSH_MASTER_SOCKET} -M $REMOTE 'bash -s' < $REMOTE_SCRIPT &> $JUPYTER_LOG &
     sleep 5 # BODGE - wait for the ssh socket to be created
 }
 
