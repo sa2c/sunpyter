@@ -122,7 +122,14 @@ find_program_to_open_link(){
     local OPEN=""
     if which open &> /dev/null
     then
-        echo open
+        if [ $(open --help | grep "(VT)" | wc -l ) -eq 0 ]
+        then 
+            echo open
+        else
+            # then 'open' might refer to a tool 
+            # which has nothing to do with our aims.
+            echo
+        fi
     elif which xdg-open &> /dev/null
     then
         echo xdg-open
@@ -133,7 +140,17 @@ find_program_to_open_link(){
 
 OPEN=$(find_program_to_open_link)
 
-echo "Found program: $OPEN"
+if [ -z "$OPEN" ]
+then 
+   echo
+   echo "No program found to open link"
+   echo "please do it manually."
+   echo
+else
+   echo
+   echo "Found program: $OPEN"
+   echo
+fi
 
 if which $OPEN &> /dev/null
 then
