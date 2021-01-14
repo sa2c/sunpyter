@@ -86,10 +86,13 @@ Tested on:
 - Arch linux,
   - Bash 5.0.18, 
   - openSSH8.4p1, OpenSSL1.1.1h, 22 Sep 2020
-- Git Bash
+- Git Bash (*auto-open not working*)
   - Bash 4.4.23, 
   - openSSH8.4p1, OpenSSL1.1.1h, 22 Sep 2020
-   
+- Microsoft Windows Subsystem for Linux (*auto-open not working*)
+  - (`uname -a`): Linux 4.4.0-19041-Microsoft #488-Microsoft Mon Sep 01 13:43:00 PST 2020 x86_64 x86_64 x86_64 GNU/Linux
+  - OpenSSH_7.2p2 Ubuntu-4ubuntu2.10, OpenSSL 1.0.2g  1 Mar 2016
+  - GNU bash, version 4.3.48(1)-release (x86_64-pc-linux-gnu)
 # Troubleshooting
   * **The script takes a long time "Waiting..." and nothing happens.**
     It can take a couple of minutes. 
@@ -102,6 +105,4 @@ Tested on:
   * **I get ERROR: /cdt_storage/<my_username> does not exist.**
     You need to log into the CDT storage log in node 
     to have your home directory created first.
-  * **It does not work with the Windows Subsystem for Linux**
-    This is a known issue, sorry. 
-    Use Git Bash instead.
+    
