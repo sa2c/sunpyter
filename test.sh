@@ -15,6 +15,7 @@ export REMOTE=$SCW_USERNAME@sunbird.swansea.ac.uk
 
 source ./testlib.sh
 
+test_not_on_login_nodes &&
 test_cdt_branch &&
 test_ssh_agent &&
 test_ssh_socket_creation &&
@@ -24,5 +25,6 @@ test_ssh_socket_creation &&
     echo "# Testing ways of checking ports... #"
     echo "#####################################"
     (test_ssHtan && echo "Other ways will not be tested") ||
-    (test_lsofi && echo "Other ways will not be tested") || (test_netstatan && echo "Other ways will not be tested") 
+    (test_lsofi && echo "Other ways will not be tested") ||
+    (test_netstatan && echo "Other ways will not be tested") 
 )

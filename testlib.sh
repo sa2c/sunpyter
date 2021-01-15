@@ -1,15 +1,39 @@
 #!/usr/bin/env bash
 
+test_not_on_login_nodes(){
+    echo
+    echo "======================================================"
+    echo "Testing this is not running on the login nodes."
+    echo "This (and sunpyter) should be running on your machine!"
+    echo "======================================================"
+    HOST=$(hostname)
+    if [ $HOST == "sl1" ] || [ $HOST == "sl2" ]
+    then
+        echo "Test failed:"
+        echo "You're running it on the Sunbird login nodes"
+        return 1
+    elif [ $HOST == "sa2c-backup2" ]
+    then
+        echo "Test failed:"
+        echo "You're running it on the CDT storage login node"
+        return 1
+    else
+        echo "Test successful:"
+        echo "On $HOST"
+    fi
+}
+
 test_cdt_branch(){
     echo
     echo "======================================================"
     echo "Testing that we are on the CDT branch"
     echo "(which should be true, otherwise you couldn't see this)"
     echo "======================================================"
-    BRANCH=$(git status | grep "On branch" | cut -d' ' -f3)
+    BRANCH=$(git status | grep "On branch" | awk '{print $NF}')
     if [ $BRANCH == "CDT" ]
     then
         echo "Test successful"
+        echo "On branch $BRANCH"
     else
         echo "Test failed: on $BRANCH instead."
         return 1
@@ -62,7 +86,7 @@ test_ssHtan(){
     echo "Testing whether ss is present on your system"
     echo "and accepts the right options"
     echo "======================================================"
-    ss -Htan > /dev/null  && echo "Test was successful" || (
+    ss -Htan > /dev/null  && echo "Test was successful, ss command works" || (
             echo "ss -Htan does not work on your system"
             echo "you may still be ok if lsof or netstat work."
             return 1
@@ -75,7 +99,7 @@ test_lsofi(){
     echo "Testing whether lsof is present on your system"
     echo "and accepts the right options"
     echo "======================================================"
-    lsof -i :8888 > /dev/null  && echo "Test was successful" || (
+    lsof -i :8888 > /dev/null  && echo "Test was successful, lsof command works" || (
             echo "lsof -i :<port number> does not work on your system"
             echo "you may still be ok if ss or netstat work."
             return 1
@@ -88,7 +112,7 @@ test_netstatan(){
     echo "Testing whether netstat is present on your system"
     echo "and accepts the right options"
     echo "======================================================"
-    netstat -an > /dev/null  && echo "Test was successful" ||  (
+    netstat -an > /dev/null  && echo "Test was successful, netstat command works" ||  (
             echo "netstat -an does not work on your system"
             echo "you may still be ok if ss or lsof work."
             return 1
