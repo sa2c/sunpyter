@@ -116,4 +116,24 @@ Tested on:
   * **I get ERROR: /cdt_storage/<my_username> does not exist.**
     You need to log into the CDT storage log in node 
     to have your home directory created first.
-    
+  * **I get some other ERROR message and I am on Windows.**
+    Chances are that some scripts were modified 
+    when git downloaded them.
+    Try
+    ```
+    dos2unix remote_script.sh
+    ```
+    and try again running sunpyter.  
+  * **I get a "connection timed out" error**
+    If you have mistyped your password 3 times
+    in a row, you may have been banned for 6 hours.
+    If you have time, just wait. 
+    If you are in a hurry, 
+    you might ask us 
+    to manually unban your IP address.
+    You can get your IP address 
+    on `whatismyip.com`, 
+    it's written right of 
+    `My Public IPv4 is:`
+  * **Any other problem**
+    Contact us!
