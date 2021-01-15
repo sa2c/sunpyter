@@ -105,6 +105,14 @@ Tested on:
     If an old jupyter job of yours is still running, 
     you will not be able to start a new one. 
     Use `scancel` to kill the old one.
+    Alternatively, you can run the tool
+    ```
+    kill_remote_sunpyter_jobs.sh your-scw-username 
+    ```
+    from your own computer, 
+    which will find all the remote jobs
+    launched by sunpyter
+    and terminates them.
   * **I get ERROR: /cdt_storage/<my_username> does not exist.**
     You need to log into the CDT storage log in node 
     to have your home directory created first.
