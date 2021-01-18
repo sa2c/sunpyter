@@ -1,4 +1,0 @@
-- check that it works on windows (translate to powershell maybe?)
-  - ssh authenticator
-- change starting directory (actually, the 3 scripts could be united if that makes any sense)
-- install environments in the compute nodes
