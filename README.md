@@ -89,7 +89,13 @@ jupyter notebooks on Sunbird without much effort.
     ```
     dos2unix remote_script.sh
     ```
-    and try again running sunpyter.  
+    and try again running sunpyter.
+  * **oduleCmd_Load.c(213):ERROR:105: Unable to locate a modulefile for 'anaconda/2020.07**
+    Try
+    ```
+    do2unix remote_script.sh
+    ```
+    and try again running sunpyter.
   * **I get a "connection timed out" error**
     Your IP might have been banned.
     If you have mistyped your password 3 times
