@@ -1,6 +1,12 @@
 # SSH keys guide
 
-## SSH key creation
+## SSH key types
+There are multiple posibilities 
+regarding the choice of key type.
+Sunpyter assumes that your private ssh key is `~/.ssh/id_rsa`,
+so this guide will focus on RSA keys. 
+
+## SSH key check and creation
 Check if you have the files `~/.ssh/id_rsa`
 and  `~/.ssh/id_rsa.pub`.
 ("`~`" represents your home directory, 

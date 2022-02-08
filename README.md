@@ -34,7 +34,7 @@ jupyter notebooks on Sunbird without much effort.
 
 # Usage
 
-0. Run `test.sh` 
+0. From a terminal on your machine, run `test.sh` 
    and please follow the messages on screen.
    Please report anything suspicious.
 1. From a terminal (or Git Bash on Windows),
@@ -62,7 +62,7 @@ jupyter notebooks on Sunbird without much effort.
     Make sure you are not running `test.sh` 
     on Sunbird. 
     `test.sh` and `sunpyter.sh`
-    must be run on your home machine.T
+    must be run on your home machine.
   * **The script takes a long time "Waiting..." and nothing happens.**
     It can take a couple of minutes. 
     After that, you might have to ssh into `sunbird` 
