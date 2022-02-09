@@ -2,6 +2,7 @@ This is a small collection of shell scripts that should allow running
 jupyter notebooks on Sunbird without much effort.
 
 # Preliminaries
+These are steps
 - Set up the SSH keys
   Set up your ssh key in advance. 
   This may require using `ssh-keygen` 
@@ -21,12 +22,15 @@ jupyter notebooks on Sunbird without much effort.
 - Use the CDT branch
  Make sure you check out the `CDT` branch, not `master`.
 
+- Copy or link the data from the charities you are interested in 
+  into your home directory on the CDT login node storage.
+
 ## Notes on **Windows**
   Make sure you have 
   the latest version of Git Bash 
   available.
 
-## Test your system first.
+## Test your system first!
   A bunch of tests 
   to make sure that `sunpyter` can run correctly 
   is contained in the script `test.sh`.
@@ -36,9 +40,6 @@ jupyter notebooks on Sunbird without much effort.
 
 # Usage
 
-0. From a terminal on your machine, run `test.sh` 
-   and please follow the messages on screen.
-   Please report anything suspicious.
 1. From a terminal (or Git Bash on Windows),
    use the command:
    ```bash

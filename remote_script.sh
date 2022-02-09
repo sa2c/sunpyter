@@ -18,7 +18,6 @@ export JUPYTER_RUNTIME_DIR=$WORKDIR/.local/share/jupyter
 # 2 choosing a directory where to start the jupyter notebook;
 module load anaconda/2020.07
 source activate $CONDA_ENV_PATH
-# Setting the working directory 
 
 LOG=~/sunpyter_log.txt
 rm -r $LOG
