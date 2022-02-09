@@ -15,6 +15,8 @@ jupyter notebooks on Sunbird without much effort.
 - Have your HOME created on the CDT storage
   Make sure your home directory on the cdt storage is created. 
   This happens when you log in the first time on the CDT storage login node. 
+  Follow the [CDT storage login node connection](cdt-storage-connection.md)
+  
 
 - Use the CDT branch
  Make sure you check out the `CDT` branch, not `master`.
@@ -24,7 +26,7 @@ jupyter notebooks on Sunbird without much effort.
   the latest version of Git Bash 
   available.
 
-# Test your system first.
+## Test your system first.
   A bunch of tests 
   to make sure that `sunpyter` can run correctly 
   is contained in the script `test.sh`.
