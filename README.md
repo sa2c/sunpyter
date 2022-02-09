@@ -2,7 +2,9 @@ This is a small collection of shell scripts that should allow running
 jupyter notebooks on Sunbird without much effort.
 
 # Preliminaries
-These are steps
+
+These are steps that you need to do only once
+before starting to use Sunpyter.
 - Set up the SSH keys
   Set up your ssh key in advance. 
   This may require using `ssh-keygen` 
@@ -18,12 +20,12 @@ These are steps
   This happens when you log in the first time on the CDT storage login node. 
   Follow the [CDT storage login node connection](cdt-storage-connection.md)
   
-
 - Use the CDT branch
  Make sure you check out the `CDT` branch, not `master`.
 
 - Copy or link the data from the charities you are interested in 
   into your home directory on the CDT login node storage.
+  You can use the `copy_files.sh` script to that aim. 
 
 ## Notes on **Windows**
   Make sure you have 

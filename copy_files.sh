@@ -10,16 +10,32 @@ echo "+===============================================+"
 echo "For the subsequent operations, we need your SuperComputingWales username."
 echo "Please type it below:"
 read SCW_USERNAME
-CDT_LOGIN=137.44.249.154
+CDT_LOGIN=sa2c-backup2.swansea.ac.uk
 export REMOTE=$SCW_USERNAME@$CDT_LOGIN
 
-
 cat > copy_files_remote.sh <<SCRIPT_CONTENT
-for DATA_DIR in ChanceToShine
+# TODO: UPDATE THIS WHEN MORE CHARITIES ARE AVAILABLE
+for DATA_DIR in sericc
 do
-    echo cp -r ../\$DATA_DIR ~/\$DATA_DIR
-    cp -r ../\$DATA_DIR ~/\$DATA_DIR
+    if [ ! -d  ~/\$DATA_DIR ]
+    then
+        echo cp -r /cdt_storage/\$DATA_DIR ~/\$DATA_DIR
+        cp -r /cdt_storage/\$DATA_DIR ~/\$DATA_DIR
+        # Making sure the copied data
+        # is not overwritten or changed.
+        chmod a-w ~/\$DATA_DIR
+    else
+        echo "Directory" \$DATA_DIR "already copied."
+    fi
 done
+SHARED=~/shared
+if [ ! -d \$SHARED ]
+then
+    echo ln -s /cdt_storage/scw1738 \$SHARED
+    ln -s /cdt_storage/scw1738 \$SHARED
+else
+    echo "Shared directory already linked."
+fi
 SCRIPT_CONTENT
 
 echo "Copying data... "
