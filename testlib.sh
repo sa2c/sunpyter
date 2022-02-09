@@ -2,10 +2,10 @@
 
 test_not_on_login_nodes(){
     echo
-    echo "======================================================"
+    echo "=========================================================="
     echo "Testing this is not running on the login nodes."
     echo "This (and sunpyter) should be running on your machine!"
-    echo "======================================================"
+    echo "=========================================================="
     HOST=$(hostname)
     if [ $HOST == "sl1" ] || [ $HOST == "sl2" ]
     then
@@ -25,10 +25,10 @@ test_not_on_login_nodes(){
 
 test_cdt_branch(){
     echo
-    echo "======================================================"
+    echo "=========================================================="
     echo "Testing that we are on the CDT branch"
     echo "(which should be true, otherwise you couldn't see this)"
-    echo "======================================================"
+    echo "=========================================================="
     BRANCH=$(git status | grep "On branch" | awk '{print $NF}')
     if [ $BRANCH == "CDT" ]
     then
@@ -42,9 +42,9 @@ test_cdt_branch(){
 
 test_ssh_agent(){
     echo
-    echo "======================================================"
+    echo "=========================================================="
     echo "Testing ssh agent setup"
-    echo "======================================================"
+    echo "=========================================================="
     echo "Creating ssh agent:"
     eval $(ssh-agent) 
     echo "Adding ~/.ssh/id_rsa to agent. You will be asked your key's passphrase:"
@@ -56,10 +56,10 @@ test_ssh_agent(){
 
 test_ssh_socket_creation(){
     echo
-    echo "======================================================"
+    echo "=========================================================="
     echo "Testing ssh socket creation"
     echo "(this will take ~15 seconds)"
-    echo "======================================================"
+    echo "=========================================================="
     source ./find_resources.sh
     SSH_SOCKET=$(find_free_ssh_socket)
     echo "Trying with socket: ${SSH_SOCKET}"
@@ -82,10 +82,10 @@ test_ssh_socket_creation(){
 
 test_ssHtan(){
     echo
-    echo "======================================================"
+    echo "=========================================================="
     echo "Testing whether ss is present on your system"
     echo "and accepts the right options"
-    echo "======================================================"
+    echo "=========================================================="
     ss -Htan > /dev/null  && echo "Test was successful, ss command works" || (
             echo "ss -Htan does not work on your system"
             echo "you may still be ok if lsof or netstat work."
@@ -95,10 +95,10 @@ test_ssHtan(){
 
 test_lsofi(){
     echo
-    echo "======================================================"
+    echo "=========================================================="
     echo "Testing whether lsof is present on your system"
     echo "and accepts the right options"
-    echo "======================================================"
+    echo "=========================================================="
     lsof -i :8888 > /dev/null  && echo "Test was successful, lsof command works" || (
             echo "lsof -i :<port number> does not work on your system"
             echo "you may still be ok if ss or netstat work."
@@ -108,10 +108,10 @@ test_lsofi(){
 
 test_netstatan(){
     echo
-    echo "======================================================"
+    echo "=========================================================="
     echo "Testing whether netstat is present on your system"
     echo "and accepts the right options"
-    echo "======================================================"
+    echo "=========================================================="
     netstat -an > /dev/null  && echo "Test was successful, netstat command works" ||  (
             echo "netstat -an does not work on your system"
             echo "you may still be ok if ss or lsof work."
@@ -119,3 +119,15 @@ test_netstatan(){
         )
 }
 
+test_cdt_storage_home(){
+    USER=$1
+    echo
+    echo "=========================================================="
+    echo "Testing that you have a home directory in the cdt storage"
+    echo "=========================================================="
+    echo "Connecting to sunbird and testing home directory existence"
+    echo "through the compute nodes."
+    echo "You might be required your Supercomputing Wales password."
+    ssh $REMOTE 'bash -s' < cdt-login-home-check.sh
+
+}
