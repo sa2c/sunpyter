@@ -15,7 +15,7 @@ export REMOTE=$SCW_USERNAME@$CDT_LOGIN
 
 cat > copy_files_remote.sh <<SCRIPT_CONTENT
 # TODO: UPDATE THIS WHEN MORE CHARITIES ARE AVAILABLE
-for DATA_DIR in sericc
+for DATA_DIR in sericc carerstrust gobeyond
 do
     if [ ! -d  ~/\$DATA_DIR ]
     then
