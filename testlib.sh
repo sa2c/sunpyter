@@ -23,23 +23,6 @@ test_not_on_login_nodes(){
     fi
 }
 
-test_cdt_branch(){
-    echo
-    echo "=========================================================="
-    echo "Testing that we are on the CDT branch"
-    echo "(which should be true, otherwise you couldn't see this)"
-    echo "=========================================================="
-    BRANCH=$(git status | grep "On branch" | awk '{print $NF}')
-    if [ $BRANCH == "CDT" ]
-    then
-        echo "Test successful"
-        echo "On branch $BRANCH"
-    else
-        echo "Test failed: on $BRANCH instead."
-        return 1
-    fi
-}
-
 test_ssh_agent(){
     echo
     echo "=========================================================="

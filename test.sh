@@ -16,7 +16,6 @@ export REMOTE=$SCW_USERNAME@sunbird.swansea.ac.uk
 source ./testlib.sh
 
 test_not_on_login_nodes &&
-test_cdt_branch &&
 test_ssh_agent &&
 test_ssh_socket_creation &&
 (
