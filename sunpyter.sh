@@ -11,7 +11,7 @@ source $CONFIG
 
 if [ -z "$REMOTE" ]
 then 
-    echo "Please give a remote, e.g. username@vnc.sunbird.swansea.ac.uk"
+    echo "Please give a remote, e.g. username@sunbird.swansea.ac.uk"
     exit
 fi
 
@@ -106,7 +106,7 @@ echo "Using local port $JUPYTER_LOCAL_PORT"
 
 echo "Creating ssh tunnnel:"
 echo "ssh -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE"
-ssh -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE
+ssh -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -N $REMOTE
 SSHTUNNELPROC=$( ps -ef | grep ssh | grep $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT | grep -v grep | awk '{print $2}')
 echo SSHTUNNELPROC=$SSHTUNNELPROC
 
