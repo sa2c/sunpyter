@@ -4,7 +4,6 @@
 # 2 choosing a directory where to start the jupyter notebook;
 
 # This is a conda environment containing a jupyter notebook installation
-conda activate /scratch/s.michele.mesiti/conda_example
+source activate /scratch/s.tianyi.pan/jupyter_gpu
 # working directory
-cd 
-
+cd /lustrehome/home/s.tianyi.pan
