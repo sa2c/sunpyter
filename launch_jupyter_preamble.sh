@@ -1,4 +1,3 @@
 #!/bin/bash 
-module load anaconda/2019.03
+module load anaconda/2021.05
 source activate
-
