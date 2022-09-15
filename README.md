@@ -1,6 +1,23 @@
 This is a small collection of shell scripts that should allow running
 jupyter notebooks on Sunbird without much effort.
 
+## Temporary usage on Windows
+### Please note: this is a temporary fix on Windows.
+Due to the maintenance work on Sunbird, the VNC server is down. SSH tunnelling is also not working properly at this moment. To run your Jupyter notebooks on GPU, you need to configure `config_example.sh` with your SCW username and account, and rename it to `config.sh`.
+
+From a terminal, use the command:
+```bash
+./sunpyter.sh config.sh
+```
+Once `Sunpyter` is successfully launched, where you will find a link in your terminal. Please open another terminal and use the command:
+
+```
+ssh -L 8888:scsXXXX:8888 YOUR.SCW.USERNAME@sunbird.swansea.ac.uk
+```
+(You can find the `node number` (scsXXXX) in the first terminal.)
+
+Then, please go back to your first terminal, copy the link and open it in your browser.
+
 # Usage
 From a terminal, use the command:
 ```bash
