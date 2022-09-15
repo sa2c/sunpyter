@@ -1,4 +1,4 @@
-REMOTE=s.tianyi.pan@sunbird.swansea.ac.uk # Username&host, or alias
+REMOTE=YOUR.SCW.USERNAME@sunbird.swansea.ac.uk # Username&host or alias. (@vnc.sunbird.swansea.ac.uk) if you want to use the VNC server (currently down).
 SHELLSETUP=shellsetup_example.sh
 RUNWHERE=compute # either 'compute' or 'login'
-ACCOUNT=scw1000 # account to run the job on for the jupyter notebook.
+ACCOUNT=SCWxxxx # account to run the job on for the jupyter notebook.
