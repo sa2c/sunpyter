@@ -105,8 +105,8 @@ echo "Using local port $JUPYTER_LOCAL_PORT"
 ################################
 
 echo "Creating ssh tunnnel:"
-echo "ssh -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE"
-ssh -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -N $REMOTE
+#echo "ssh -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE"
+#ssh -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -N $REMOTE #Currentl, SSH tunnelling is not working properly, please have a look at README
 SSHTUNNELPROC=$( ps -ef | grep ssh | grep $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT | grep -v grep | awk '{print $2}')
 echo SSHTUNNELPROC=$SSHTUNNELPROC
 
