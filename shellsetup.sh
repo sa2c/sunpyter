@@ -6,4 +6,4 @@
 # This is a conda environment containing a jupyter notebook installation
 source activate /scratch/s.tianyi.pan/jupyter_gpu
 # working directory
-cd /lustrehome/home/s.tianyi.pan
+cd

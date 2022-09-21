@@ -45,8 +45,8 @@ fi
 
 ssh $REMOTE 'bash -s' < <( cat launch_jupyter_preamble.sh "$SHELLSETUP" "$LAUNCH_JUPYTER_COMMAND" | sed 's/SEDACCOUNT/'$ACCOUNT'/') &> jupyter_log.txt &
 
-SSHPROC=$( ps -ef | grep ssh | grep $REMOTE | grep bash | grep -v grep | awk '{print $2}'| sort -n | tail -n 1)
-echo SSHPROC=$SSHPROC
+#SSHPROC=$( ps -ef | grep ssh | grep $REMOTE | grep bash | grep -v grep | awk '{print $2}'| sort -n | tail -n 1)
+#echo SSHPROC=$SSHPROC
 echo "Waiting for jupyter notebook to start on server..."
 
 RUNNINGCONFIRMATIONSTRING="Use Control-C to stop this server and shut down all kernels (twice to skip confirmation)."
@@ -54,9 +54,10 @@ RUNNINGCONFIRMATIONSTRING="Use Control-C to stop this server and shut down all k
 printf "Waiting..."
 while [ $(grep $RUNNINGCONFIRMATIONSTRING jupyter_log.txt 2>/dev/null | wc -l ) -eq 0 ]
 do
-    sleep 1
+    sleep 5
     printf .
 done
+
 echo "Launched."
 
 echo "Output from the server:"
@@ -73,7 +74,7 @@ echo "========================================================================"
 # comes from the script running on sunbird.
 
 # This 'purification' is needed to prevent grep from misreading the file
-LINE=$(cat jupyter_log.txt | tr -d '\000' | grep -A 1 "The Jupyter Notebook is running at:" | tail -n 1)
+LINE=$(cat jupyter_log.txt | tr -d '\000' | grep -A 1 "Or copy and paste one of these URLs" | tail -n 1)
 
 REMOTE_HOST_AND_PORT=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\1|')
 AUTH_TOKEN=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\2|')
@@ -81,6 +82,7 @@ AUTH_TOKEN=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\2|')
 #############################
 # Finding a free local port #
 #############################
+
 JUPYTER_LOCAL_PORT=8888  # Start from this one 
 
 # different machines can have different commands for this
@@ -107,17 +109,28 @@ echo "Using local port $JUPYTER_LOCAL_PORT"
 echo "Creating ssh tunnnel:"
 #echo "ssh -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -fN $REMOTE"
 #ssh -L $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT -N $REMOTE #Currentl, SSH tunnelling is not working properly, please have a look at README
-SSHTUNNELPROC=$( ps -ef | grep ssh | grep $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT | grep -v grep | awk '{print $2}')
-echo SSHTUNNELPROC=$SSHTUNNELPROC
-
+#SSHTUNNELPROC=$( ps -ef | grep ssh | grep $JUPYTER_LOCAL_PORT:$REMOTE_HOST_AND_PORT | grep -v grep | awk '{print $2}')
+#echo SSHTUNNELPROC=$SSHTUNNELPROC
 
 # chosing program to open link.
 which open &> /dev/null && OPEN=open 
 [ -z "$OPEN" ] && which xdg-open &> /dev/null && OPEN=xdg-open
 
 echo "Opening link..."
-echo $OPEN http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
-$OPEN http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
+echo $OPEN "http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN"
+$OPEN "http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN"
+
+echo "If nothing happens, copy and paste this link in your browser:"
+echo
+echo http://localhost:$JUPYTER_LOCAL_PORT/?token=$AUTH_TOKEN
+echo
+echo '                     REMEMBER:'
+echo '              KEEP THIS TERMINAL OPEN.'
+echo '                 WHEN YOU ARE DONE:'
+echo ' CLICK ON THE "QUIT" BUTTON ON THE JUPYTER WEB INTERFACE.'
+echo '        AND TERMINATE THIS PROCESS WITH CTRL+C.'
+echo '      THEN YOU CAN CLOSE THE TERMINAL IF YOU WISH.'
+echo
 
 ###############
 # Cleaning up #
