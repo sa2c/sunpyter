@@ -3,7 +3,7 @@ jupyter notebooks on Sunbird without much effort.
 
 ## Temporary usage on Windows
 ### Please note: this is a temporary fix on Windows.
-Due to the maintenance work on Sunbird, the VNC server is down. SSH tunnelling is also not working properly at this moment. To run your Jupyter notebooks on GPU, you need to configure `config_example.sh` with your SCW username and account, and rename it to `config.sh`.
+Due to the maintenance work on Sunbird, the VNC server is down. SSH tunnelling is also not working properly at this moment. To run your Jupyter notebooks on GPU, **you need to configure `config_example.sh` with your SCW username and account, and rename it to `config.sh`**.
 
 From a terminal, use the command:
 ```bash
