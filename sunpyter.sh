@@ -43,7 +43,7 @@ else
     exit
 fi
 
-ssh $REMOTE 'bash -s' < <( cat launch_jupyter_preamble.sh "$SHELLSETUP" "$LAUNCH_JUPYTER_COMMAND" | sed 's/SEDACCOUNT/'$ACCOUNT'/') &> jupyter_log.txt &
+ssh $REMOTE 'bash -s' < <( cat "$SHELLSETUP" "$LAUNCH_JUPYTER_COMMAND" | sed 's/SEDACCOUNT/'$ACCOUNT'/') &> jupyter_log.txt &
 
 #SSHPROC=$( ps -ef | grep ssh | grep $REMOTE | grep bash | grep -v grep | awk '{print $2}'| sort -n | tail -n 1)
 #echo SSHPROC=$SSHPROC
