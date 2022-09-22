@@ -75,7 +75,7 @@ jupyter notebook on a compute node.
 
 ## TODO 
 - [x] Make sure it works on Mac
-- [ ] How to make this work on Windows? Do we care?
+- [x] How to make this work on Windows? Do we care? Yes, we care.
 - [ ] The `login` mode does not work on sl1 and sl2, only on vnc - to investigate.
 - [ ] The `--ip=*` option for jupyter notebook seemed to be necessary, but is 
       regarded as dangerous - to investigate.
