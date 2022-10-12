@@ -3,3 +3,4 @@ config.sh
 shellsetup.sh
 config_login.sh
 *.txt
+.ssh_agent_setup
