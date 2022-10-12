@@ -4,9 +4,11 @@
 # 1 activation of a conda environment;
 # 2 choosing a directory where to start the jupyter notebook;
 
-# This is an EXAMPLE conda environment containing a jupyter notebook installation
 # Please use yours if your notebooks require different packages
 module load anaconda/2021.05
 source activate /PATH-TO-YOUR-CONDA-ENV
+# source activate /scratch/s.tianyi.pan/jupyter_gpu
+# This is an EXAMPLE conda environment containing a jupyter notebook installation
+
 # Speficy working directory
 cd
