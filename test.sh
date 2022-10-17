@@ -26,5 +26,4 @@ test_ssh_socket_creation &&
     (test_ssHtan && echo "Other ways will not be tested") ||
     (test_lsofi && echo "Other ways will not be tested") ||
     (test_netstatan && echo "Other ways will not be tested") 
-) &&
-test_cdt_storage_home $SCW_USERNAME
+)

@@ -101,16 +101,3 @@ test_netstatan(){
             return 1
         )
 }
-
-test_cdt_storage_home(){
-    USER=$1
-    echo
-    echo "=========================================================="
-    echo "Testing that you have a home directory in the cdt storage"
-    echo "=========================================================="
-    echo "Connecting to sunbird and testing home directory existence"
-    echo "through the compute nodes."
-    echo "You might be required your Supercomputing Wales password."
-    ssh $REMOTE 'bash -s' < cdt-login-home-check.sh
-
-}

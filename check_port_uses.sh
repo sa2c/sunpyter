@@ -25,4 +25,3 @@ check_port_uses(){
     local PORT=$1
     check_port_lsof $PORT || check_port_ss $PORT || check_port_netstat $PORT
 }
-
