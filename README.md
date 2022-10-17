@@ -15,18 +15,6 @@ before starting to use Sunpyter.
   For more detailed instructions,
   see the [SSH keys guide](ssh-keys-guide.md). 
 
-- Have your HOME created on the CDT storage
-  Make sure your home directory on the cdt storage is created. 
-  This happens when you log in the first time on the CDT storage login node. 
-  Follow the [CDT storage login node connection](cdt-storage-connection.md)
-  
-- Use the CDT branch
- Make sure you check out the `CDT` branch, not `master`.
-
-- Copy or link the data from the charities you are interested in 
-  into your home directory on the CDT login node storage.
-  You can use the `copy_files.sh` script to that aim. 
-
 ## Notes on **Windows**
   Make sure you have 
   the latest version of Git Bash 
@@ -84,9 +72,6 @@ before starting to use Sunpyter.
     which will find all the remote jobs
     launched by sunpyter
     and terminates them.
-  * **I get ERROR: /cdt_storage/<my_username> does not exist.**
-    You need to log into the CDT storage log in node 
-    to have your home directory created first.
   * **I get some other ERROR message and I am on Windows.**
     Chances are that some scripts were modified 
     when git downloaded them.
