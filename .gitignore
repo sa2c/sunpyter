@@ -1,5 +1,3 @@
-jupyter_log.txt
-test_log.txt
+*.txt
 .ssh_agent_setup
 copy_files_remote.sh
-playground

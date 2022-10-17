@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-
-ACCOUNT=scw1738
-HOMEDIR=/cdt_storage/$USER
+ACCOUNT=scw1000
+HOMEDIR=/home/$USER
 
 cat > job_script.sh <<SCRIPT_CONTENT
 #!/bin/bash
@@ -17,9 +16,12 @@ else
 fi
 SCRIPT_CONTENT
 
-srun --partition s_highmem_cdt \
-    -A $ACCOUNT \
+srun -A $ACCOUNT \
+    --partition accel_ai \
+    -o $LOG \
+    -J SUNPYTER_$USER \
+    --dependency=singleton \
     -n 1 \
-    -t 1 \
+    --gres=gpu:1 \
     --oversubscribe \
     bash job_script.sh

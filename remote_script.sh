@@ -1,8 +1,8 @@
 #!/bin/bash 
-ACCOUNT=scw1738
+ACCOUNT=scw1000
 # This is a conda environment containing a jupyter notebook installation
-CONDA_ENV_PATH=/scratch/s.michele.mesiti/dataaid
-WORKDIR=/cdt_storage/$USER
+CONDA_ENV_PATH=/scratch/s.tianyi.pan/jupyter_gpu
+WORKDIR=/home/$USER
 
 export JUPYTER_CONFIG_DIR=$CONDA_ENV_PATH/etc/jupyter
 
@@ -16,7 +16,7 @@ export JUPYTER_RUNTIME_DIR=$WORKDIR/.local/share/jupyter
 # sets up the jupyter notebook environment correctly.
 # 1 activation of a conda environment;
 # 2 choosing a directory where to start the jupyter notebook;
-module load anaconda/2020.07
+module load anaconda/2021.05
 source activate $CONDA_ENV_PATH
 
 LOG=~/sunpyter_log.txt
@@ -41,16 +41,16 @@ else
 fi
 SCRIPT_CONTENT
 
-sbatch --partition s_highmem_cdt \
-    -A $ACCOUNT \
+sbatch -A $ACCOUNT \
+    --partition accel_ai \
     -o $LOG \
-    -J SUNPYTER \
+    -J SUNPYTER_$USER \
     --dependency=singleton \
     -n 1 \
+    --gres=gpu:1 \
     --oversubscribe \
     job_script_sunpyter.sh
 
 # This is used to sends the output of the log
 # to the user's machine for scraping 
 tail -f $LOG 
-
