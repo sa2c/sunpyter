@@ -1,95 +1,91 @@
-This is a small collection of shell scripts that should allow running
-jupyter notebooks on Sunbird without much effort.
+This is a small collection of shell scripts that should allow running Jupyter notebooks on GPU on Sunbird without much effort.
 
 # Preliminaries
 
-These are steps that you need to do only once
-before starting to use Sunpyter.
-- Set up the SSH keys
-  Set up your ssh key in advance. 
-  This may require using `ssh-keygen` 
-  to create a public-private key pair 
-  (if you haven't already)
-  and `ssh-copy-id` to install the public key to sunbird.
-  
-  For more detailed instructions,
-  see the [SSH keys guide](ssh-keys-guide.md). 
+These are steps that you need to do only once before starting to use Sunpyter. Please set up your SSH key in advance. 
+This may require using `ssh-keygen` to create a public-private key pair (if you haven't already) and `ssh-copy-id` to install the public key to Sunbird.
+For more detailed instructions, see the [SSH keys guide](ssh-keys-guide.md). 
 
 ## Notes on **Windows**
-  Make sure you have 
-  the latest version of Git Bash 
-  available.
+Make sure you have the latest version of Git Bash available. You can update Git Bash using the command:
+
+```bash
+git update-git-for-windows
+```
 
 ## Test your system first!
-  A bunch of tests 
-  to make sure that `sunpyter` can run correctly 
-  is contained in the script `test.sh`.
-  Please run that first.
-  If you encounter problems,
-  look at the Troubleshooting section of this guide.
+A bunch of tests to make sure that `Sunpyter` can run correctly is contained in the script `test.sh`.
+Please run that first, use the command
+```bash
+./test.sh
+```
+If you encounter problems, look at the Troubleshooting section of this guide.
 
 # Usage
+Before start running Sunpyter on Sunbird, please modify `ACCOUNT` in `remote_script.sh` to your SCW project (e.g. `scw1234`), you may change `CONDA_ENV_PATH` if you have a customised Conda environment on Sunbird. The default set-up is for GPU use, if you only need CPU, please modify the `sbatch` part (Line 43-51) in `remote_script.sh`.
 
-1. From a terminal (or Git Bash on Windows),
-   use the command:
+1. From a terminal (or Git Bash on Windows), use the command:
    ```bash
-   ./sunpyter.sh  <your_username_on_sunbird>
+   ./sunpyter.sh  <your_username_on_Sunbird>
    ```
-2. Type the passphrase for your ssh key,
-3. Wait
-4. `sunpyter` will 
-   either open a browser window 
-   or give you a link 
-   that you can copy and paste in a browser.
+2. Type the passphrase for your SSH key.
+
+3. Wait.
+
+4. Sunpyter will either open a browser window or give you a link that you can copy and paste in a browser. (**Please NOTE: Don't use `Ctrl+C` to copy the link.**)
+
 5. Do what you need to do, but **do not close the terminal yet**.
-6. At the end, 
-   to make sure that 
-   the resources on Sunbird are released,
-   press `Ctrl+C` in the terminal window.
-   Pressing the "Quit" button is also a good idea.
-7. You can now close the terminal,
-   if you want.
+
+6. At the end, to make sure that the resources on Sunbird are released, press `Ctrl+C` in the terminal window. Pressing the "Quit" button in the Jupyter notebooks is also a good idea.
+
+7. You can now close the terminal.
 
 # Troubleshooting
-  * **test.sh fails while testing being on the CDT branch**
-    Make sure you are not running `test.sh` 
-    on Sunbird. 
-    `test.sh` and `sunpyter.sh`
-    must be run on your home machine.
+  * **test.sh fails**
+  
+    Make sure you are not running `test.sh` on Sunbird. Both `test.sh` and `sunpyter.sh` must be run on your home machine.
+    
   * **The script takes a long time "Waiting..." and nothing happens.**
+  
     It can take a couple of minutes. 
-    After that, you might have to ssh into `sunbird` 
+    After that, you might have to `ssh` into Sunbird 
     and check the output of `squeue -u $USER`.
-    Notice: you can have only one jupyter job running on Sunbird.
-    If an old jupyter job of yours is still running, 
+    Notice: you can have only one Supyter job running on Sunbird.
+    If an old Supyter job of yours is still running, 
     you will not be able to start a new one. 
     Use `scancel` to kill the old one.
     Alternatively, you can run the tool
-    ```
+    ```bash
     kill_remote_sunpyter_jobs.sh your-scw-username 
     ```
     from your own computer, 
     which will find all the remote jobs
-    launched by sunpyter
+    launched by Sunpyter
     and terminates them.
+    
   * **I get some other ERROR message and I am on Windows.**
+  
     Chances are that some scripts were modified 
     when git downloaded them.
     Try
-    ```
+    ```bash
     dos2unix remote_script.sh
     ```
-    and try again running sunpyter.
-  * **oduleCmd_Load.c(213):ERROR:105: Unable to locate a modulefile for 'anaconda/2020.07**
+    and try again running Sunpyter.
+    
+  * **oduleCmd_Load.c(213):ERROR:105: Unable to locate a modulefile for 'anaconda/2021.05**
+  
     Try
-    ```
+    ```bash
     dos2unix remote_script.sh
     ```
-    and try again running sunpyter.
+    and try again running Sunpyter.
+    
   * **I get a "connection timed out" error**
+  
     Your IP might have been banned.
     If you have mistyped your password 3 times
-    in a row, you may have been banned for 6 hours.
+    in a row, you may have been banned for 24 hours.
     If you have time, just wait. 
     If you are in a hurry, 
     you might ask us 
@@ -98,8 +94,10 @@ before starting to use Sunpyter.
     on `whatismyip.com`, 
     it's written right of 
     `My Public IPv4 is:`
-  * **Any other problem**
-    Contact us!
+    
+  * **Any other problems**
+  
+    Please contact us.
 
 # Notes
 Some more notes on the inner workings of sunpyter
