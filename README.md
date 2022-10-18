@@ -22,7 +22,7 @@ Please run that first, use the command
 If you encounter problems, look at the Troubleshooting section of this guide.
 
 # Usage
-Before start running Sunpyter on Sunbird, please modify `ACCOUNT` in `remote_script.sh` to your SCW project (e.g. `scw1234`), you may change `CONDA_ENV_PATH` if you have a customised Conda environment on Sunbird. The default set-up is for GPU use, if you only need CPU, please modify the `sbatch` part (Line 43-51) in `remote_script.sh`.
+Before start running Sunpyter on Sunbird, please modify `ACCOUNT` in `remote_script.sh` to your SCW project (e.g. `scw1234`), you may change `CONDA_ENV_PATH` if you have a customised Conda environment on Sunbird. In `remote_script.sh`, you can choose running Sunpyter on CPU or GPU byt selecting between `compute` or `accel_ai` partitions. You may also specify how many CPU cores or GPUs in `remote_script.sh`.
 
 1. From a terminal (or Git Bash on Windows), use the command:
    ```bash
