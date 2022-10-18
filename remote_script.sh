@@ -65,7 +65,7 @@ then
         -J SUNPYTER_$USER \
         --dependency=singleton \
         -n 1 \
-        --ntasks=&NUM_CPU \
+        --ntasks=$NUM_CPU \
         --oversubscribe \
         job_script_sunpyter.sh
     
