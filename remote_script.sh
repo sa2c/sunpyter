@@ -4,11 +4,11 @@ ACCOUNT=scw1000 # This is an example of SCW account.
 # Please specify the partition for running Sunpyter.
 PARTITION=accel_ai # Please specify the partition you want to use.
 
-# This lists all the available partitions on Sunbird.
-# compute, accel_ai, accel_ai_dev, accel_ai_mig, gpu, s_gpu_eng
-# If you only need CPU then specify "compute" above. 
+# This lists all the available GPU partitions on Sunbird.
+# accel_ai, accel_ai_dev, accel_ai_mig, gpu, s_gpu_eng
+# If you don't specify a GPU partition, Sunpyter will run on CPU only. 
 
-# This is a very simple conda environment containing a jupyter notebook installation
+# This is a conda environment containing a Jupyter Notebook installation.
 # Please specify your own customised conda environment if you need.
 CONDA_ENV_PATH=/scratch/s.tianyi.pan/jupyter_gpu
 
@@ -24,15 +24,11 @@ NUM_CPU=4 # This is the default setting (4 cores).
 NUM_GPU=1 # This is the default setting (1 GPU).
 
 # Partition selection
-if [ "$PARTITION" == "compute" ]
-then
-    GRES_DIRECTIVE="--ntasks=$NUM_CPU"
-elif ([ "$PARTITION" == "accel_ai" ] || [ "$PARTITION" == "accel_ai_dev" ] || [ "$PARTITION" == "accel_ai_mig" ] || [ "$PARTITION" == "gpu" ] || [ "$PARTITION" == "s_gpu_eng" ])
+if ([ "$PARTITION" == "accel_ai" ] || [ "$PARTITION" == "accel_ai_dev" ] || [ "$PARTITION" == "accel_ai_mig" ] || [ "$PARTITION" == "gpu" ] || [ "$PARTITION" == "s_gpu_eng" ])
 then
     GRES_DIRECTIVE="--gres=gpu:${NUM_GPU}"
 else
-    echo 'Wrong launch specification, use either "compute" or other GPU partitions (e.g., accel_ai, accel_ai_dev, accel_ai_mig, gpu, s_gpu_eng).'
-    exit
+    GRES_DIRECTIVE="--ntasks=$NUM_CPU"
 fi
 
 export JUPYTER_CONFIG_DIR=$CONDA_ENV_PATH/etc/jupyter
