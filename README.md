@@ -36,7 +36,7 @@ Before start running Sunpyter on Sunbird, please modify `ACCOUNT` in `remote_scr
 
 5. Do what you need to do, but **please do not close the terminal yet**.
 
-6. At the end, to make sure that the resources on Sunbird are released, press `Ctrl+C` in the terminal window. Pressing the "Quit" button in the Jupyter notebooks is also a good idea.
+6. At the end, to make sure that the resources on Sunbird are released, press `Ctrl+C` in the terminal window.
 
 7. You can now close the terminal.
 

@@ -2,17 +2,32 @@
 # Please speficy your SCW project account (for example, scwXXXX). 
 ACCOUNT=scw1000 # This is an example of SCW account.
 
-# Please speficy the partition for running your Jupyter notebooks.
-# If you need CPU then use "compute". If you need GPU, please speficy "accel_ai".
-PARTITION=accel_ai # Must be either "compute" or "accel_ai"
+# Please speficy the partition for running Sunpyter.
+PARTITION=accel_ai # Please speficy the partition you want to use.
 
-# For "compute" ONLY! 
+# This lists all the available partitions on Sunbird.
+#PARTITION_LIST=compute, accel_ai, accel_ai_dev, accel_ai_mig, gpu, s_gpu_eng
+# If you need CPU then use "compute". If you need GPU, please speficy "accel_ai".
+
+# For CPU only.
 # Please speficy the number of CPU cores you need.
 NUM_CPU=4 # This is the default setting (4 cores).
 
-# For "accel_ai" ONLY! 
+# For GPU only.
 # Please speficy the number of GPUs you need.
 NUM_GPU=1 # This is the default setting (1 GPU).
+
+# Partition selection
+if [ "$PARTITION" == "compute" ]
+then
+    GRES_DIRECTIVE="--ntasks=$NUM_CPU"
+elif [ "$PARTITION" == "accel_ai" ]
+then
+    GRES_DIRECTIVE="--gres=gpu:${NUM_GPU}"
+else
+    echo 'Wrong launch specification, use either "compute" or "accel_ai".'
+    exit
+fi
 
 # This is a very simple conda environment containing a jupyter notebook installation
 # Please speficy your own customised conda environment if you need.
@@ -57,34 +72,16 @@ else
 fi
 SCRIPT_CONTENT
 
-if [ "$PARTITION" == "compute" ]
-then
-    sbatch -A $ACCOUNT \
-        --partition=compute \
-        -o $LOG \
-        -J SUNPYTER_$USER \
-        --dependency=singleton \
-        -n 1 \
-        --ntasks=$NUM_CPU \
-        --oversubscribe \
-        job_script_sunpyter.sh
-    
-elif [ "$PARTITION" == "accel_ai" ]
-then
-    sbatch -A $ACCOUNT \
-        --partition=accel_ai \
-        -o $LOG \
-        -J SUNPYTER_$USER \
-        --dependency=singleton \
-        -n 1 \
-        --gres=gpu:$NUM_GPU \
-        --oversubscribe \
-        job_script_sunpyter.sh
+sbatch -A $ACCOUNT \
+    --partition=${PARTITION} \
+    -o $LOG \
+    -n 1\
+    ${GRES_DIRECTIVE} \
+    -J SUNPYTER_$USER \
+    --dependency=singleton \
+    --oversubscribe \
+    job_script_sunpyter.sh
 
-else
-    echo 'Wrong launch specification, use either "compute" or "accel_ai".'
-    exit
-fi
 # This is used to sends the output of the log
 # to the user's machine for scraping 
 tail -f $LOG 
