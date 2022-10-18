@@ -32,9 +32,9 @@ Before start running Sunpyter on Sunbird, please modify `ACCOUNT` in `remote_scr
 
 3. Wait.
 
-4. Sunpyter will either open a browser window or give you a link that you can copy and paste in a browser. (**Please NOTE: Don't use `Ctrl+C` to copy the link.**)
+4. Sunpyter will either open a browser window or give you a link that you can copy and paste in a browser. (Note that **Ctrl+C will not work here** and instead will quit your notebook server.)
 
-5. Do what you need to do, but **do not close the terminal yet**.
+5. Do what you need to do, but **please do not close the terminal yet**.
 
 6. At the end, to make sure that the resources on Sunbird are released, press `Ctrl+C` in the terminal window. Pressing the "Quit" button in the Jupyter notebooks is also a good idea.
 
@@ -50,8 +50,8 @@ Before start running Sunpyter on Sunbird, please modify `ACCOUNT` in `remote_scr
     It can take a couple of minutes. 
     After that, you might have to `ssh` into Sunbird 
     and check the output of `squeue -u $USER`.
-    Notice: you can have only one Supyter job running on Sunbird.
-    If an old Supyter job of yours is still running, 
+    Notice: you can have only one Sunpyter job running on Sunbird.
+    If an old Sunpyter job of yours is still running, 
     you will not be able to start a new one. 
     Use `scancel` to kill the old one.
     Alternatively, you can run the tool
@@ -100,8 +100,7 @@ Before start running Sunpyter on Sunbird, please modify `ACCOUNT` in `remote_scr
     Please contact us.
 
 # Notes
-Some more notes on the inner workings of sunpyter
-can be found [in this guide](internals_documentation.md).
+Some tips can be found in [Extra Documentation](extra_documentation.md) and [Kernel Installations](kernel_installations.md).
 
 Tested on:
 - Arch linux,
