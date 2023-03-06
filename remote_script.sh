@@ -2,7 +2,7 @@
 # Please specify your SCW project account (for example, scwXXXX). 
 ACCOUNT=scw1000 # This is an example of SCW account.
 # Please specify the partition for running Sunpyter.
-PARTITION=accel_ai # Please specify the partition you want to use.
+PARTITION=development # Please specify the partition you want to use.
 
 # This lists all the available GPU partitions on Sunbird.
 # accel_ai, accel_ai_dev, accel_ai_mig, gpu, s_gpu_eng
@@ -10,7 +10,7 @@ PARTITION=accel_ai # Please specify the partition you want to use.
 
 # This is a conda environment containing a Jupyter Notebook installation.
 # Please specify your own customised conda environment if you need.
-CONDA_ENV_PATH=/scratch/s.tianyi.pan/jupyter_gpu
+CONDA_ENV_PATH=/path/to/your/conda/environment
 
 # Please specify the working directory for your Jupyter notebooks.
 WORKDIR=/home/$USER
