@@ -8,8 +8,7 @@ PARTITION=development # Please specify the partition you want to use.
 # accel_ai, accel_ai_dev, accel_ai_mig, gpu, s_gpu_eng
 # If you don't specify a GPU partition, Sunpyter will run on CPU only. 
 
-# This is a conda environment containing a Jupyter Notebook installation.
-# Please specify your own customised conda environment if you need.
+# Please specify a conda environment containing a Jupyter Notebook installation.
 CONDA_ENV_PATH=/path/to/your/conda/environment
 
 # Please specify the working directory for your Jupyter notebooks.
