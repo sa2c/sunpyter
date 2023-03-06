@@ -122,7 +122,7 @@ find_program_to_open_link(){
     local OPEN=""
     if which open &> /dev/null
     then
-        if [ $(open --help | grep "(VT)" | wc -l ) -eq 0 ]
+        if [ $(open --help 2>&1 | grep "(VT)" | wc -l ) -eq 0 ]
         then 
             echo open
         else
