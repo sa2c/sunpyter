@@ -7,11 +7,15 @@ test_not_on_login_nodes(){
     echo "This (and sunpyter) should be running on your machine!"
     echo "=========================================================="
     HOST=$(hostname)
-    if [ $HOST == "sl1" ] || [ $HOST == "sl2" ]
+    if [[ $HOST = sl1* ]] || [[ $HOST == sl2* ]]
     then
         echo "Test failed:"
         echo "You're running it on the Sunbird login nodes"
         return 1
+    elif [[ $HOST = scs*.sunbird.supercomputingwales.ac.uk ]]
+    then
+        echo "Test failed:"
+        echo "You're running it on a compute node"
     elif [ $HOST == "sa2c-backup2" ]
     then
         echo "Test failed:"
