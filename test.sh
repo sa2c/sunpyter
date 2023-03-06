@@ -7,7 +7,7 @@ echo "+ It also explain things step by step.           +"
 echo "+ Feel free to ignore the pedantic tone.         +"
 echo "+================================================+"
 echo
-echo "For the subsequent tests, we need your SuperComputingWales username."
+echo "For the subsequent tests, we need your Supercomputing Wales username."
 echo "Please type it below:"
 read SCW_USERNAME
 
