@@ -2,6 +2,7 @@
 set -eu
 source ./find_resources.sh
 source ./cleanup.sh
+source ./keys.sh
 
 if [ $# -ne 1 ]
 then
@@ -21,7 +22,8 @@ setup_ssh_agent(){
         ssh-agent > .ssh_agent_setup # sets SSH_AGENT_PID
         echo "export SUNPYTER_SSH_AGENT=true" >> .ssh_agent_setup
         source .ssh_agent_setup
-        ssh-add ~/.ssh/id_rsa
+        keyfile="$(get_keyfile)"
+        ssh-add "${keyfile}"
     )
     source .ssh_agent_setup
 }

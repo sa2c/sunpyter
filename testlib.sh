@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ./keys.sh
+
 test_not_on_login_nodes(){
     echo
     echo "=========================================================="
@@ -33,9 +35,10 @@ test_ssh_agent(){
     echo "Testing ssh agent setup"
     echo "=========================================================="
     echo "Creating ssh agent:"
-    eval $(ssh-agent) 
-    echo "Adding ~/.ssh/id_rsa to agent. You will be asked your key's passphrase:"
-    ssh-add ~/.ssh/id_rsa
+    eval $(ssh-agent)
+    keyfile="$(get_keyfile)"
+    echo "Adding '${keyfile}' to agent. You will be asked your key's passphrase:"
+    ssh-add "${keyfile}"
     echo "We'll now try to connect to sunbird.swansea.ac.uk"
     echo "If you are requested your SCW password, this test has failed."
     ssh $REMOTE "echo Connected, hopefully without password."
