@@ -95,13 +95,13 @@ echo "========================================================================"
 # comes from the script running on sunbird.
 
 # This 'purification' is needed to prevent grep from misreading the file
-LINE=$(cat jupyter_log.txt | tr -d '\000' | grep -A 1 -E "Jupyter\s*Notebook.*is\s*running\s*at:" | tail -n 1) 
+LINE=$(cat jupyter_log.txt | tr -d '\000' | grep -A 1 -E -e "Jupyter\s*Notebook.*is\s*running\s*at:" -e "Jupyter\s*Server.*is\s*running\s*at:" | tail -n 1)
 
 echo Log Line with connection information:
 echo $LINE
 
-REMOTE_HOST_AND_PORT=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\1|')
-AUTH_TOKEN=$(echo $LINE | sed -E 's|.*http://(.*)/\?token=([0-9a-f]+)$|\2|')
+REMOTE_HOST_AND_PORT=$(echo $LINE | sed -E 's|.*http://(.*)/.*\?token=([0-9a-f]+)$|\1|')
+AUTH_TOKEN=$(echo $LINE | sed -E 's|.*http://(.*)\?token=([0-9a-f]+)$|\2|')
 
 #############################
 # Finding a free local port #
