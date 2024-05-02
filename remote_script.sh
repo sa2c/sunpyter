@@ -59,7 +59,7 @@ cat > job_script_sunpyter.sh <<SCRIPT_CONTENT
 #!/bin/bash
 if [ -d $WORKDIR ]
 then
-    jupyter notebook --notebook-dir $WORKDIR --no-browser --ip='*'
+    jupyter notebook --notebook-dir $WORKDIR --no-browser --ip="\$(hostname)"
 else
     echo "ERROR: $WORKDIR does not exist."
     echo "ERROR: Make sure you do the necessary steps to create it first."
