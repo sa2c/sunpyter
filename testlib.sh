@@ -18,7 +18,7 @@ test_not_on_login_nodes(){
     then
         echo "Test failed:"
         echo "You're running it on a compute node"
-    elif [ $HOST == "sa2c-backup2" ]
+    elif [ $HOST == "sa2c-backup" ]
     then
         echo "Test failed:"
         echo "You're running it on the CDT storage login node"
